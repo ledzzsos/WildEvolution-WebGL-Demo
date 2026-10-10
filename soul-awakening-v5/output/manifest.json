@@ -1,0 +1,798 @@
+{
+  "version": 3,
+  "fps": 24,
+  "duration": 6.8,
+  "overlay_start_frame": 68,
+  "canvas": [
+    432,
+    768
+  ],
+  "region": [
+    0,
+    0,
+    432,
+    768
+  ],
+  "grid": [
+    4,
+    2
+  ],
+  "format": "webp",
+  "atlas_mode": "per_sheet_true_alpha_crop",
+  "shared": "background.mp4",
+  "idle": "idle.webp",
+  "cases": {
+    "wolf": {
+      "species": "Wolf",
+      "tier": 1,
+      "label": "狼Ⅰ",
+      "duration": 6.1,
+      "start_frame": 68,
+      "frames": 79,
+      "sheets": [
+        {
+          "file": "packs/wolf/atlas-00.webp",
+          "rect": [
+            36,
+            172,
+            383,
+            548
+          ]
+        },
+        {
+          "file": "packs/wolf/atlas-01.webp",
+          "rect": [
+            40,
+            154,
+            374,
+            546
+          ]
+        },
+        {
+          "file": "packs/wolf/atlas-02.webp",
+          "rect": [
+            51,
+            157,
+            367,
+            544
+          ]
+        },
+        {
+          "file": "packs/wolf/atlas-03.webp",
+          "rect": [
+            77,
+            201,
+            339,
+            497
+          ]
+        },
+        {
+          "file": "packs/wolf/atlas-04.webp",
+          "rect": [
+            91,
+            229,
+            339,
+            482
+          ]
+        },
+        {
+          "file": "packs/wolf/atlas-05.webp",
+          "rect": [
+            64,
+            214,
+            368,
+            589
+          ]
+        },
+        {
+          "file": "packs/wolf/atlas-06.webp",
+          "rect": [
+            50,
+            209,
+            382,
+            603
+          ]
+        },
+        {
+          "file": "packs/wolf/atlas-07.webp",
+          "rect": [
+            29,
+            209,
+            403,
+            600
+          ]
+        },
+        {
+          "file": "packs/wolf/atlas-08.webp",
+          "rect": [
+            98,
+            209,
+            332,
+            476
+          ]
+        },
+        {
+          "file": "packs/wolf/atlas-09.webp",
+          "rect": [
+            98,
+            209,
+            332,
+            476
+          ]
+        }
+      ],
+      "audio": "audio/wolf.m4a",
+      "result_image": "packs/wolf/result.webp",
+      "bytes": 2055892,
+      "layer_error": 0.039,
+      "nonempty_frames": 78
+    },
+    "bear": {
+      "species": "Bear",
+      "tier": 1,
+      "label": "熊Ⅰ",
+      "duration": 6.1,
+      "start_frame": 68,
+      "frames": 79,
+      "sheets": [
+        {
+          "file": "packs/bear/atlas-00.webp",
+          "rect": [
+            36,
+            172,
+            383,
+            548
+          ]
+        },
+        {
+          "file": "packs/bear/atlas-01.webp",
+          "rect": [
+            40,
+            154,
+            374,
+            546
+          ]
+        },
+        {
+          "file": "packs/bear/atlas-02.webp",
+          "rect": [
+            51,
+            157,
+            367,
+            544
+          ]
+        },
+        {
+          "file": "packs/bear/atlas-03.webp",
+          "rect": [
+            49,
+            201,
+            383,
+            504
+          ]
+        },
+        {
+          "file": "packs/bear/atlas-04.webp",
+          "rect": [
+            67,
+            229,
+            365,
+            504
+          ]
+        },
+        {
+          "file": "packs/bear/atlas-05.webp",
+          "rect": [
+            49,
+            214,
+            383,
+            589
+          ]
+        },
+        {
+          "file": "packs/bear/atlas-06.webp",
+          "rect": [
+            50,
+            209,
+            382,
+            603
+          ]
+        },
+        {
+          "file": "packs/bear/atlas-07.webp",
+          "rect": [
+            29,
+            209,
+            403,
+            600
+          ]
+        },
+        {
+          "file": "packs/bear/atlas-08.webp",
+          "rect": [
+            54,
+            209,
+            378,
+            504
+          ]
+        },
+        {
+          "file": "packs/bear/atlas-09.webp",
+          "rect": [
+            51,
+            209,
+            381,
+            504
+          ]
+        }
+      ],
+      "audio": "audio/bear.m4a",
+      "result_image": "packs/bear/result.webp",
+      "bytes": 2569839,
+      "layer_error": 0.036,
+      "nonempty_frames": 78
+    },
+    "eagle": {
+      "species": "Eagle",
+      "tier": 1,
+      "label": "鹰Ⅰ",
+      "duration": 6.1,
+      "start_frame": 68,
+      "frames": 79,
+      "sheets": [
+        {
+          "file": "packs/eagle/atlas-00.webp",
+          "rect": [
+            36,
+            172,
+            383,
+            548
+          ]
+        },
+        {
+          "file": "packs/eagle/atlas-01.webp",
+          "rect": [
+            40,
+            154,
+            374,
+            546
+          ]
+        },
+        {
+          "file": "packs/eagle/atlas-02.webp",
+          "rect": [
+            51,
+            157,
+            367,
+            544
+          ]
+        },
+        {
+          "file": "packs/eagle/atlas-03.webp",
+          "rect": [
+            77,
+            201,
+            339,
+            497
+          ]
+        },
+        {
+          "file": "packs/eagle/atlas-04.webp",
+          "rect": [
+            104,
+            224,
+            328,
+            476
+          ]
+        },
+        {
+          "file": "packs/eagle/atlas-05.webp",
+          "rect": [
+            64,
+            214,
+            368,
+            589
+          ]
+        },
+        {
+          "file": "packs/eagle/atlas-06.webp",
+          "rect": [
+            50,
+            209,
+            382,
+            603
+          ]
+        },
+        {
+          "file": "packs/eagle/atlas-07.webp",
+          "rect": [
+            29,
+            209,
+            403,
+            600
+          ]
+        },
+        {
+          "file": "packs/eagle/atlas-08.webp",
+          "rect": [
+            103,
+            209,
+            329,
+            468
+          ]
+        },
+        {
+          "file": "packs/eagle/atlas-09.webp",
+          "rect": [
+            103,
+            209,
+            329,
+            466
+          ]
+        }
+      ],
+      "audio": "audio/eagle.m4a",
+      "result_image": "packs/eagle/result.webp",
+      "bytes": 2082417,
+      "layer_error": 0.031,
+      "nonempty_frames": 78
+    },
+    "spider": {
+      "species": "Spider",
+      "tier": 1,
+      "label": "蜘蛛Ⅰ",
+      "duration": 6.1,
+      "start_frame": 68,
+      "frames": 79,
+      "sheets": [
+        {
+          "file": "packs/spider/atlas-00.webp",
+          "rect": [
+            36,
+            172,
+            383,
+            548
+          ]
+        },
+        {
+          "file": "packs/spider/atlas-01.webp",
+          "rect": [
+            40,
+            154,
+            374,
+            546
+          ]
+        },
+        {
+          "file": "packs/spider/atlas-02.webp",
+          "rect": [
+            51,
+            157,
+            367,
+            544
+          ]
+        },
+        {
+          "file": "packs/spider/atlas-03.webp",
+          "rect": [
+            77,
+            201,
+            341,
+            500
+          ]
+        },
+        {
+          "file": "packs/spider/atlas-04.webp",
+          "rect": [
+            92,
+            229,
+            341,
+            501
+          ]
+        },
+        {
+          "file": "packs/spider/atlas-05.webp",
+          "rect": [
+            64,
+            214,
+            368,
+            589
+          ]
+        },
+        {
+          "file": "packs/spider/atlas-06.webp",
+          "rect": [
+            50,
+            209,
+            382,
+            603
+          ]
+        },
+        {
+          "file": "packs/spider/atlas-07.webp",
+          "rect": [
+            29,
+            209,
+            403,
+            600
+          ]
+        },
+        {
+          "file": "packs/spider/atlas-08.webp",
+          "rect": [
+            97,
+            209,
+            335,
+            501
+          ]
+        },
+        {
+          "file": "packs/spider/atlas-09.webp",
+          "rect": [
+            98,
+            209,
+            335,
+            499
+          ]
+        }
+      ],
+      "audio": "audio/spider.m4a",
+      "result_image": "packs/spider/result.webp",
+      "bytes": 2474201,
+      "layer_error": 0.038,
+      "nonempty_frames": 78
+    },
+    "kun": {
+      "species": "Kun",
+      "tier": 1,
+      "label": "鲲Ⅰ",
+      "duration": 6.1,
+      "start_frame": 68,
+      "frames": 79,
+      "sheets": [
+        {
+          "file": "packs/kun/atlas-00.webp",
+          "rect": [
+            36,
+            172,
+            383,
+            548
+          ]
+        },
+        {
+          "file": "packs/kun/atlas-01.webp",
+          "rect": [
+            40,
+            154,
+            374,
+            546
+          ]
+        },
+        {
+          "file": "packs/kun/atlas-02.webp",
+          "rect": [
+            51,
+            157,
+            367,
+            544
+          ]
+        },
+        {
+          "file": "packs/kun/atlas-03.webp",
+          "rect": [
+            77,
+            201,
+            352,
+            501
+          ]
+        },
+        {
+          "file": "packs/kun/atlas-04.webp",
+          "rect": [
+            83,
+            229,
+            352,
+            501
+          ]
+        },
+        {
+          "file": "packs/kun/atlas-05.webp",
+          "rect": [
+            64,
+            214,
+            368,
+            589
+          ]
+        },
+        {
+          "file": "packs/kun/atlas-06.webp",
+          "rect": [
+            50,
+            209,
+            382,
+            603
+          ]
+        },
+        {
+          "file": "packs/kun/atlas-07.webp",
+          "rect": [
+            29,
+            209,
+            403,
+            600
+          ]
+        },
+        {
+          "file": "packs/kun/atlas-08.webp",
+          "rect": [
+            83,
+            209,
+            352,
+            501
+          ]
+        },
+        {
+          "file": "packs/kun/atlas-09.webp",
+          "rect": [
+            85,
+            209,
+            348,
+            499
+          ]
+        }
+      ],
+      "audio": "audio/kun.m4a",
+      "result_image": "packs/kun/result.webp",
+      "bytes": 2372075,
+      "layer_error": 0.028,
+      "nonempty_frames": 78
+    },
+    "wolf2": {
+      "species": "Wolf",
+      "tier": 2,
+      "label": "影狼Ⅱ",
+      "duration": 6.8,
+      "start_frame": 68,
+      "frames": 96,
+      "sheets": [
+        {
+          "file": "packs/wolf2/atlas-00.webp",
+          "rect": [
+            0,
+            0,
+            432,
+            768
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-01.webp",
+          "rect": [
+            0,
+            0,
+            432,
+            768
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-02.webp",
+          "rect": [
+            0,
+            0,
+            432,
+            768
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-03.webp",
+          "rect": [
+            40,
+            177,
+            390,
+            554
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-04.webp",
+          "rect": [
+            0,
+            189,
+            432,
+            554
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-05.webp",
+          "rect": [
+            0,
+            183,
+            432,
+            563
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-06.webp",
+          "rect": [
+            70,
+            230,
+            362,
+            554
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-07.webp",
+          "rect": [
+            26,
+            210,
+            406,
+            627
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-08.webp",
+          "rect": [
+            25,
+            209,
+            407,
+            628
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-09.webp",
+          "rect": [
+            33,
+            209,
+            399,
+            610
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-10.webp",
+          "rect": [
+            70,
+            209,
+            362,
+            554
+          ]
+        },
+        {
+          "file": "packs/wolf2/atlas-11.webp",
+          "rect": [
+            70,
+            209,
+            362,
+            554
+          ]
+        }
+      ],
+      "audio": "audio/wolf2.m4a",
+      "result_image": "packs/wolf2/result.webp",
+      "bytes": 3766467,
+      "layer_error": 0.124,
+      "nonempty_frames": 95
+    },
+    "bear2": {
+      "species": "Bear",
+      "tier": 2,
+      "label": "山罴Ⅱ",
+      "duration": 6.8,
+      "start_frame": 68,
+      "frames": 96,
+      "sheets": [
+        {
+          "file": "packs/bear2/atlas-00.webp",
+          "rect": [
+            0,
+            0,
+            432,
+            768
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-01.webp",
+          "rect": [
+            0,
+            0,
+            432,
+            768
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-02.webp",
+          "rect": [
+            0,
+            0,
+            432,
+            768
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-03.webp",
+          "rect": [
+            40,
+            177,
+            383,
+            554
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-04.webp",
+          "rect": [
+            0,
+            189,
+            432,
+            554
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-05.webp",
+          "rect": [
+            0,
+            183,
+            432,
+            563
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-06.webp",
+          "rect": [
+            60,
+            230,
+            372,
+            554
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-07.webp",
+          "rect": [
+            26,
+            210,
+            406,
+            627
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-08.webp",
+          "rect": [
+            25,
+            209,
+            407,
+            628
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-09.webp",
+          "rect": [
+            33,
+            209,
+            399,
+            610
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-10.webp",
+          "rect": [
+            70,
+            209,
+            362,
+            554
+          ]
+        },
+        {
+          "file": "packs/bear2/atlas-11.webp",
+          "rect": [
+            70,
+            209,
+            362,
+            554
+          ]
+        }
+      ],
+      "audio": "audio/bear2.m4a",
+      "result_image": "packs/bear2/result.webp",
+      "bytes": 4138557,
+      "layer_error": 0.123,
+      "nonempty_frames": 95
+    }
+  },
+  "shared_bytes": 215200
+}
