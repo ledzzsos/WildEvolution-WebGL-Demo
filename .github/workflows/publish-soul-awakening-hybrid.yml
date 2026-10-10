@@ -1,0 +1,31 @@
+name: Publish standalone two-stage soul awakening demo
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-soul-awakening-hybrid.yml'
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve browser-tested sample package
+        env:
+          SOURCE_ARTIFACT: "https://sdmntprnznorth.oaiusercontent.com/files/00000000-0230-820b-a884-f05b32eaddff/raw?se=2026-10-10T15%3A44%3A09Z&sp=r&sv=2026-02-06&sr=b&scid=6905440a-6633-5bf5-8401-9ae2c0d5e02b&skoid=f5e14fda-2af7-44a3-9d18-d372ffcad871&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-10T02%3A11%3A12Z&ske=2026-10-11T02%3A11%3A12Z&sks=b&skv=2026-02-06&sig=c7iABTNo4/kyr79SJB8ukPldt0UnC2ZDn8ZhksDify8%3D"
+        run: |
+          curl --fail --silent --show-error --location --retry 3 "$SOURCE_ARTIFACT" -o /tmp/soul-awakening-hybrid.zip
+          unzip -t /tmp/soul-awakening-hybrid.zip
+          mkdir -p soul-awakening-hybrid
+          unzip -oq /tmp/soul-awakening-hybrid.zip -d soul-awakening-hybrid
+          test -s soul-awakening-hybrid/index.html
+          test -s soul-awakening-hybrid/output/manifest.json
+          test -s soul-awakening-hybrid/output/common.mp4
+      - name: Publish only subdirectory, leave original WebGL untouched
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add soul-awakening-hybrid
+          git commit -m "Add browser playable soul awakening hybrid proof" || exit 0
+          git push origin HEAD:main
