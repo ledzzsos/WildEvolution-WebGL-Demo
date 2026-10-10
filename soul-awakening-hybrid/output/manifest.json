@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "fps": 24,
+  "seam": 2.875,
+  "canvas": [
+    432,
+    768
+  ],
+  "region": [
+    16,
+    168,
+    416,
+    608
+  ],
+  "grid": [
+    4,
+    4
+  ],
+  "format": "webp",
+  "shared": "common.mp4",
+  "poster": "seam.webp",
+  "idle": "idle.webp",
+  "cases": {
+    "wolf": {
+      "label": "狼Ⅰ",
+      "tier": 1,
+      "species": "Wolf",
+      "duration": 6.1,
+      "frames": 78,
+      "sheets": [
+        "packs/wolf/atlas-00.webp",
+        "packs/wolf/atlas-01.webp",
+        "packs/wolf/atlas-02.webp",
+        "packs/wolf/atlas-03.webp",
+        "packs/wolf/atlas-04.webp"
+      ],
+      "audio": "audio/wolf.m4a",
+      "bytes": 1891910,
+      "mean_pixel_error_sample": 0.74
+    },
+    "wolf2": {
+      "label": "影狼Ⅱ",
+      "tier": 2,
+      "species": "Wolf",
+      "duration": 6.8,
+      "frames": 95,
+      "sheets": [
+        "packs/wolf2/atlas-00.webp",
+        "packs/wolf2/atlas-01.webp",
+        "packs/wolf2/atlas-02.webp",
+        "packs/wolf2/atlas-03.webp",
+        "packs/wolf2/atlas-04.webp",
+        "packs/wolf2/atlas-05.webp"
+      ],
+      "audio": "audio/wolf2.m4a",
+      "bytes": 2361665,
+      "mean_pixel_error_sample": 1.49
+    },
+    "bear2": {
+      "label": "山罴Ⅱ",
+      "tier": 2,
+      "species": "Bear",
+      "duration": 6.8,
+      "frames": 95,
+      "sheets": [
+        "packs/bear2/atlas-00.webp",
+        "packs/bear2/atlas-01.webp",
+        "packs/bear2/atlas-02.webp",
+        "packs/bear2/atlas-03.webp",
+        "packs/bear2/atlas-04.webp",
+        "packs/bear2/atlas-05.webp"
+      ],
+      "audio": "audio/bear2.m4a",
+      "bytes": 2641041,
+      "mean_pixel_error_sample": 1.49
+    }
+  },
+  "shared_bytes": 139237
+}
