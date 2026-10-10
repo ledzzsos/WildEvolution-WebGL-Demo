@@ -1,0 +1,31 @@
+name: Publish continuous-background alpha-creature proof
+on:
+  push:
+    paths: ['.github/workflows/publish-soul-awakening-layered.yml']
+permissions:
+  contents: write
+jobs:
+  deploy-sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download verified rendered sample
+        env:
+          SAMPLE_ZIP_URL: "https://sdmntpraustraliaeast.oaiusercontent.com/files/00000000-7b40-81fa-8d10-e46c2fedf5e8/raw?se=2026-10-10T16%3A10%3A55Z&sp=r&sv=2026-02-06&sr=b&scid=88e30733-522e-5d2e-9fec-94ecbaf3b507&skoid=f5e14fda-2af7-44a3-9d18-d372ffcad871&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-10T00%3A18%3A13Z&ske=2026-10-11T00%3A18%3A13Z&sks=b&skv=2026-02-06&sig=ZTDE8h1sQ8wXQIqG5BBbWDsRXaoM23RTNOdsfBujbVc%3D"
+        run: |
+          curl --fail --silent --show-error --location --retry 3 "$SAMPLE_ZIP_URL" -o /tmp/soul-awakening-layered.zip
+          unzip -t /tmp/soul-awakening-layered.zip
+          mkdir -p soul-awakening-layered
+          unzip -qo /tmp/soul-awakening-layered.zip -d soul-awakening-layered
+          test -s soul-awakening-layered/index.html
+          test -s soul-awakening-layered/output/manifest.json
+          test -s soul-awakening-layered/output/background.mp4
+          grep -q '"version": 2' soul-awakening-layered/output/manifest.json
+      - name: Publish in separate public subdirectory
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add soul-awakening-layered
+          git commit -m "Publish creature-free background and RGBA creature overlay demo" || exit 0
+          git push origin HEAD:main
