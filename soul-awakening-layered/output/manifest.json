@@ -1,0 +1,105 @@
+{
+  "version": 2,
+  "fps": 24,
+  "duration": 6.8,
+  "overlay_start_frame": 68,
+  "canvas": [
+    432,
+    768
+  ],
+  "region": [
+    0,
+    0,
+    432,
+    768
+  ],
+  "grid": [
+    4,
+    2
+  ],
+  "format": "webp",
+  "shared": "background.mp4",
+  "idle": "idle.webp",
+  "cases": {
+    "wolf": {
+      "species": "Wolf",
+      "tier": 1,
+      "label": "狼Ⅰ",
+      "duration": 6.1,
+      "start_frame": 68,
+      "frames": 79,
+      "sheets": [
+        "packs/wolf/atlas-00.webp",
+        "packs/wolf/atlas-01.webp",
+        "packs/wolf/atlas-02.webp",
+        "packs/wolf/atlas-03.webp",
+        "packs/wolf/atlas-04.webp",
+        "packs/wolf/atlas-05.webp",
+        "packs/wolf/atlas-06.webp",
+        "packs/wolf/atlas-07.webp",
+        "packs/wolf/atlas-08.webp",
+        "packs/wolf/atlas-09.webp"
+      ],
+      "audio": "audio/wolf.m4a",
+      "result_image": "packs/wolf/result.webp",
+      "bytes": 2089484,
+      "layer_error": 0.039,
+      "nonempty_frames": 78
+    },
+    "wolf2": {
+      "species": "Wolf",
+      "tier": 2,
+      "label": "影狼Ⅱ",
+      "duration": 6.8,
+      "start_frame": 68,
+      "frames": 96,
+      "sheets": [
+        "packs/wolf2/atlas-00.webp",
+        "packs/wolf2/atlas-01.webp",
+        "packs/wolf2/atlas-02.webp",
+        "packs/wolf2/atlas-03.webp",
+        "packs/wolf2/atlas-04.webp",
+        "packs/wolf2/atlas-05.webp",
+        "packs/wolf2/atlas-06.webp",
+        "packs/wolf2/atlas-07.webp",
+        "packs/wolf2/atlas-08.webp",
+        "packs/wolf2/atlas-09.webp",
+        "packs/wolf2/atlas-10.webp",
+        "packs/wolf2/atlas-11.webp"
+      ],
+      "audio": "audio/wolf2.m4a",
+      "result_image": "packs/wolf2/result.webp",
+      "bytes": 3651909,
+      "layer_error": 0.124,
+      "nonempty_frames": 95
+    },
+    "bear2": {
+      "species": "Bear",
+      "tier": 2,
+      "label": "山罴Ⅱ",
+      "duration": 6.8,
+      "start_frame": 68,
+      "frames": 96,
+      "sheets": [
+        "packs/bear2/atlas-00.webp",
+        "packs/bear2/atlas-01.webp",
+        "packs/bear2/atlas-02.webp",
+        "packs/bear2/atlas-03.webp",
+        "packs/bear2/atlas-04.webp",
+        "packs/bear2/atlas-05.webp",
+        "packs/bear2/atlas-06.webp",
+        "packs/bear2/atlas-07.webp",
+        "packs/bear2/atlas-08.webp",
+        "packs/bear2/atlas-09.webp",
+        "packs/bear2/atlas-10.webp",
+        "packs/bear2/atlas-11.webp"
+      ],
+      "audio": "audio/bear2.m4a",
+      "result_image": "packs/bear2/result.webp",
+      "bytes": 4048907,
+      "layer_error": 0.123,
+      "nonempty_frames": 95
+    }
+  },
+  "shared_bytes": 215200
+}
