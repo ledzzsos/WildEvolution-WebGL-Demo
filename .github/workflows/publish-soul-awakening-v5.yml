@@ -1,0 +1,36 @@
+name: Publish Soul Awakening V5 prelogin and locked random demo
+on:
+  push:
+    paths: ['.github/workflows/publish-soul-awakening-v5.yml']
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve validated V5 browser bundle
+        env:
+          SOURCE_ZIP: "https://sdmntprkoreacentral.oaiusercontent.com/files/00000000-eff4-8206-af0e-393532615cc5/raw?se=2026-10-10T17%3A12%3A03Z&sp=r&sv=2026-02-06&sr=b&scid=39e13c9d-3ab9-537b-8e7b-b5d2abbbd76c&skoid=1e4bb9ed-6bb5-424a-a3aa-79f21566e722&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-09T23%3A32%3A36Z&ske=2026-10-10T23%3A32%3A36Z&sks=b&skv=2026-02-06&sig=nX5RhllxDZZaGHG6Jh/FiCEHeByMH%2B5C1d%2B16LlFT5M%3D"
+        run: |
+          curl --fail --silent --show-error --location --retry 3 "$SOURCE_ZIP" -o /tmp/soul-awakening-v5.zip
+          unzip -t /tmp/soul-awakening-v5.zip
+          mkdir -p soul-awakening-v5
+          unzip -qo /tmp/soul-awakening-v5.zip -d soul-awakening-v5
+          test -s soul-awakening-v5/index.html
+          test -s soul-awakening-v5/output/manifest.json
+          test -s soul-awakening-v5/output/background.mp4
+          grep -q '"version": 3' soul-awakening-v5/output/manifest.json
+          grep -q 'lockedKey=reviewMode' soul-awakening-v5/player.js
+          grep -q 'id="boot-cover"' soul-awakening-v5/index.html
+          grep -q '"eagle"' soul-awakening-v5/output/manifest.json
+          grep -q '"spider"' soul-awakening-v5/output/manifest.json
+          grep -q '"kun"' soul-awakening-v5/output/manifest.json
+      - name: Publish V5 in isolated directory without touching existing game
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add soul-awakening-v5
+          git commit -m "Publish boot-preloaded seven-outcome soul awakening V5" || exit 0
+          git push origin HEAD:main
