@@ -32,9 +32,21 @@ Module['ready'] = new Promise(function(resolve, reject) {
   readyPromiseReject = reject;
 });
 
-      if (!Object.getOwnPropertyDescriptor(Module['ready'], '_main')) {
-        Object.defineProperty(Module['ready'], '_main', { configurable: true, get: function() { abort('You are getting _main on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
-        Object.defineProperty(Module['ready'], '_main', { configurable: true, set: function() { abort('You are setting _main on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
+      if (!Object.getOwnPropertyDescriptor(Module['ready'], '_sbrk')) {
+        Object.defineProperty(Module['ready'], '_sbrk', { configurable: true, get: function() { abort('You are getting _sbrk on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
+        Object.defineProperty(Module['ready'], '_sbrk', { configurable: true, set: function() { abort('You are setting _sbrk on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
+      }
+    
+
+      if (!Object.getOwnPropertyDescriptor(Module['ready'], '_emscripten_stack_get_base')) {
+        Object.defineProperty(Module['ready'], '_emscripten_stack_get_base', { configurable: true, get: function() { abort('You are getting _emscripten_stack_get_base on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
+        Object.defineProperty(Module['ready'], '_emscripten_stack_get_base', { configurable: true, set: function() { abort('You are setting _emscripten_stack_get_base on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
+      }
+    
+
+      if (!Object.getOwnPropertyDescriptor(Module['ready'], '_emscripten_stack_get_end')) {
+        Object.defineProperty(Module['ready'], '_emscripten_stack_get_end', { configurable: true, get: function() { abort('You are getting _emscripten_stack_get_end on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
+        Object.defineProperty(Module['ready'], '_emscripten_stack_get_end', { configurable: true, set: function() { abort('You are setting _emscripten_stack_get_end on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
       }
     
 
@@ -71,6 +83,12 @@ Module['ready'] = new Promise(function(resolve, reject) {
       if (!Object.getOwnPropertyDescriptor(Module['ready'], '_SetFullscreen')) {
         Object.defineProperty(Module['ready'], '_SetFullscreen', { configurable: true, get: function() { abort('You are getting _SetFullscreen on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
         Object.defineProperty(Module['ready'], '_SetFullscreen', { configurable: true, set: function() { abort('You are setting _SetFullscreen on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
+      }
+    
+
+      if (!Object.getOwnPropertyDescriptor(Module['ready'], '_main')) {
+        Object.defineProperty(Module['ready'], '_main', { configurable: true, get: function() { abort('You are getting _main on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
+        Object.defineProperty(Module['ready'], '_main', { configurable: true, set: function() { abort('You are setting _main on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js') } });
       }
     
 
@@ -1501,7 +1519,7 @@ function updateGlobalBufferAndViews(buf) {
 var TOTAL_STACK = 5242880;
 if (Module['TOTAL_STACK']) assert(TOTAL_STACK === Module['TOTAL_STACK'], 'the stack size can no longer be determined at runtime')
 
-var INITIAL_MEMORY = Module['INITIAL_MEMORY'] || 33554432;legacyModuleProp('INITIAL_MEMORY', 'INITIAL_MEMORY');
+var INITIAL_MEMORY = Module['INITIAL_MEMORY'] || 268435456;legacyModuleProp('INITIAL_MEMORY', 'INITIAL_MEMORY');
 
 assert(INITIAL_MEMORY >= TOTAL_STACK, 'INITIAL_MEMORY should be larger than TOTAL_STACK, was ' + INITIAL_MEMORY + '! (TOTAL_STACK=' + TOTAL_STACK + ')');
 
@@ -1511,7 +1529,7 @@ assert(typeof Int32Array != 'undefined' && typeof Float64Array !== 'undefined' &
 
 // If memory is defined in wasm, the user can't provide it.
 assert(!Module['wasmMemory'], 'Use of `wasmMemory` detected.  Use -s IMPORTED_MEMORY to define wasmMemory externally');
-assert(INITIAL_MEMORY == 33554432, 'Detected runtime INITIAL_MEMORY setting.  Use -s IMPORTED_MEMORY to define wasmMemory dynamically');
+assert(INITIAL_MEMORY == 268435456, 'Detected runtime INITIAL_MEMORY setting.  Use -s IMPORTED_MEMORY to define wasmMemory dynamically');
 
 // include: runtime_init_table.js
 // In regular non-RELOCATABLE mode the table is exported
@@ -1892,7 +1910,7 @@ function createWasm() {
     // This assertion doesn't hold when emscripten is run in --post-link
     // mode.
     // TODO(sbc): Read INITIAL_MEMORY out of the wasm file in post-link mode.
-    //assert(wasmMemory.buffer.byteLength === 33554432);
+    //assert(wasmMemory.buffer.byteLength === 268435456);
     updateGlobalBufferAndViews(wasmMemory.buffer);
 
     wasmTable = Module['asm']['__indirect_function_table'];
@@ -1993,13 +2011,13 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  3080448: function() {return Module.webglContextAttributes.premultipliedAlpha;},  
- 3080509: function() {return Module.webglContextAttributes.preserveDrawingBuffer;},  
- 3080573: function() {return Module.webglContextAttributes.powerPreference;},  
- 3080631: function() {Module['emscripten_get_now_backup'] = performance.now;},  
- 3080686: function($0) {performance.now = function() { return $0; };},  
- 3080734: function($0) {performance.now = function() { return $0; };},  
- 3080782: function() {performance.now = Module['emscripten_get_now_backup'];}
+  2278448: function() {return Module.webglContextAttributes.premultipliedAlpha;},  
+ 2278509: function() {return Module.webglContextAttributes.preserveDrawingBuffer;},  
+ 2278573: function() {return Module.webglContextAttributes.powerPreference;},  
+ 2278631: function() {Module['emscripten_get_now_backup'] = performance.now;},  
+ 2278686: function($0) {performance.now = function() { return $0; };},  
+ 2278734: function($0) {performance.now = function() { return $0; };},  
+ 2278782: function() {performance.now = Module['emscripten_get_now_backup'];}
 };
 
 
@@ -2147,6 +2165,17 @@ var ASM_CONSTS = {
       return demangleAll(js);
     }
 
+  var WXFS = {};
+  function _CheckWXFSReady() {
+      return WXFS.fs!==undefined;
+    }
+
+  function _DumpProfileStatsCallback(str){
+       if(typeof GameGlobal!='undefined') {
+         GameGlobal.monkeyCallback(_WXPointer_stringify_adaptor(str));
+       }
+    }
+
   function _GetJSMemoryInfo(totalJSptr, usedJSptr) {
       if (performance.memory) {
         HEAPF64[totalJSptr >> 3] = performance.memory.totalJSHeapSize;
@@ -2156,6 +2185,89 @@ var ASM_CONSTS = {
         HEAPF64[usedJSptr >> 3] = NaN;
       }
     }
+
+  function _GetObsoleteFilePath() {
+      var bufferSize = lengthBytesUTF8(WXFS.cache.obsolete) + 1;
+      var buffer = _malloc(bufferSize);
+      stringToUTF8(WXFS.cache.obsolete, buffer, bufferSize);
+      WXFS.cache.obsolete = "";
+      return buffer;
+    }
+
+  function _JSManageCpuProfile() {
+          if (!Module.IsWxGame) return;
+          if (typeof GameGlobal.manager.getGameDataMonitor !== 'function') return;
+          var monitor = GameGlobal.manager.getGameDataMonitor();
+          if (!monitor || !monitor.isRunning()) return;
+  
+          if (monitor.shouldStartCpuProfile()) {
+              wx.startCPUProfiling();
+              monitor.onCpuProfileStarted();
+          } else if (monitor.shouldStopCpuProfile()) {
+              var cpuProfileData = wx.stopCPUProfiling();
+              var jsonString = JSON.stringify(cpuProfileData);
+              var filePath = wx.env.USER_DATA_PATH + '/cpuprofile_temp.cpuprofile';
+              var fs = wx.getFileSystemManager();
+              fs.writeFileSync(filePath, jsonString, 'utf8');
+              var stat = fs.statSync(filePath);
+              monitor.onCpuProfileFileReady(filePath, stat.size);
+          }
+      }
+
+  function _JSReportUnityProfileData(
+          targetFrameRate, // fps.
+          monoHeapReserved, monoHeapUsed, nativeReserved, nativeUnused, nativeAllocated, // profiler.
+          setPassCalls, drawCalls, vertices, trianglesCount // render.
+      ) {
+          let report_data = {
+              timestamp: new Date().getTime(),
+              fps: {
+                  targetFrameRate: targetFrameRate,
+                  avgEXFrameTime: _WXGetEXFrameTime(),
+              },
+              profiler: {
+                  monoHeapReserved: monoHeapReserved,
+                  monoHeapUsed: monoHeapUsed,
+                  nativeReserved: nativeReserved,
+                  nativeUnused: nativeUnused,
+                  nativeAllocated: nativeAllocated,
+              },
+              render: {
+                  setPassCalls: setPassCalls,
+                  drawCalls: drawCalls,
+                  vertices: vertices,
+                  trianglesCount: trianglesCount,
+              },
+              webassembly: {
+                  totalHeapMemory: _WXGetTotalMemorySize(),
+                  dynamicMemory: _WXGetDynamicMemorySize(),
+                  usedHeapMemory: _WXGetUsedMemorySize(),
+                  unAllocatedMemory: _WXGetUnAllocatedMemorySize(),
+              },
+              assetbundle: {
+                  numberInMemory: _WXGetBundleNumberInMemory(),
+                  numberOnDisk: _WXGetBundleNumberOnDisk(),
+                  sizeInMemory:  _WXGetBundleSizeInMemory(),
+                  sizeOnDisk: _WXGetBundleSizeOnDisk(),
+              }
+          }
+  
+          GameGlobal.manager.getGameDataMonitor().reportUnityProfileData(report_data)
+      }
+
+  function _JSStartGameDataMonitor() {
+          if (!Module.IsWxGame) return;
+          console.log("call JSStartGameDataMonitor \n"); 
+  
+          if (typeof GameGlobal.manager.getGameDataMonitor === 'function')
+          {
+              GameGlobal.manager.getGameDataMonitor().start();
+          }
+          else
+          {
+              console.log("GameGlobal.manager.getGameDataMonitor is not a function \n");
+          }
+      }
 
   var JS_Accelerometer = null;
   
@@ -4720,6 +4832,2185 @@ var ASM_CONSTS = {
   
           requestOptions.timeout = timeout;
   	}
+
+  function _SetUnityUIType(str){
+      if(typeof GameGlobal!='undefined'){
+        GameGlobal.UnityUIType = _WXPointer_stringify_adaptor(str);
+      }
+    }
+
+  function _UnCleanbyPath(ptr, fromFile) {
+      var url = UTF8ToString(ptr);
+      var path = WXFS.url2path(url);
+      if(fromFile && !GameGlobal.manager.fs.accessSync(path)){
+        return false;
+      }
+      if(!WXFS.disk.has(path)){
+        WXFS.disk.set(path, 0);
+        WXFS.refRecord.set(path, 1);
+      } else {
+        WXFS.refRecord.set(path, WXFS.refRecord.get(path) + 1);
+      }
+      return true;
+    }
+
+  function _UnloadbyPath(ptr) {
+      var path = WXFS.url2path(UTF8ToString(ptr));
+      var fd = WXFS.path2fd.get(path);
+      var refCount = WXFS.refRecord.get(path);
+      if(!refCount) return;
+      refCount -= 1;
+      WXFS.refRecord.set(path, refCount);
+      if(!refCount){
+        if(WXFS.cache.has(fd)){
+          WXFS.cache.delete(fd);
+        }
+        if(WXFS.disk.has(path)){
+          WXFS.disk.delete(path);
+        }
+      }
+    }
+
+  function _WE_GetDebugEntriesVisible() {
+          var sdk = typeof window !== 'undefined' && window.WXWASMSDK;
+          return sdk && sdk.WE_GetDebugEntriesVisible ? sdk.WE_GetDebugEntriesVisible() : 1;
+      }
+
+  function _WE_GetSafeArea(output) {
+          if (typeof window !== 'undefined' && window.WXWASMSDK && window.WXWASMSDK.WE_GetSafeAreaValues) {
+              var host = window.WXWASMSDK.WE_GetSafeAreaValues();
+              if (host && host.length === 7) {
+                  for (var j = 0; j < 7; j++) HEAPF32[(output >> 2) + j] = host[j];
+                  return 1;
+              }
+          }
+          if (typeof wx === 'undefined') return 0;
+          try {
+              var info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
+              var w = info.windowWidth || info.screenWidth;
+              var h = info.windowHeight || info.screenHeight;
+              if (!(w > 0 && h > 0)) return 0;
+              var area = info.safeArea || { left: 0, top: 0, right: w, bottom: h };
+              var offset = info.screenHeight && h >= info.screenHeight ? 0 : (info.screenTop || 0);
+              var capsule = wx.getMenuButtonBoundingClientRect ? wx.getMenuButtonBoundingClientRect() : null;
+              var reserved = capsule && capsule.width > 0 && capsule.height > 0 && capsule.bottom > offset && capsule.bottom - offset < h ? capsule.bottom - offset : 0;
+              var values = [w, h, area.left, Math.max(0, area.top - offset), area.right, Math.min(h, area.bottom - offset), reserved];
+              for (var i = 0; i < 7; i++) {
+                  if (!isFinite(values[i])) return 0;
+                  HEAPF32[(output >> 2) + i] = values[i];
+              }
+              return 1;
+          } catch (error) {
+              return 0;
+          }
+      }
+
+  function _WE_SetDebugEntriesVisible(visible) {
+          var sdk = typeof window !== 'undefined' && window.WXWASMSDK;
+          if (sdk && sdk.WE_SetDebugEntriesVisible) sdk.WE_SetDebugEntriesVisible(!!visible);
+      }
+
+  function _WXADDestroy(id) {
+          window.WXWASMSDK.WXADDestroy(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXADGetStyleValue(id, key) {
+          return window.WXWASMSDK.WXADGetStyleValue(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key));
+      }
+
+  function _WXADLoad(id, succ, fail) {
+          window.WXWASMSDK.WXADLoad(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(succ), _WXPointer_stringify_adaptor(fail));
+      }
+
+  function _WXADStyleChange(id, key, value) {
+          window.WXWASMSDK.WXADStyleChange(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key), value);
+      }
+
+  function _WXAccessFile(path, s, f, c) {
+          return window.WXWASMSDK.WXAccessFile(_WXPointer_stringify_adaptor(path), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f), _WXPointer_stringify_adaptor(c));
+      }
+
+  function _WXAccessFileSync(path) {
+          var returnStr = window.WXWASMSDK.WXAccessFileSync(_WXPointer_stringify_adaptor(path));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXAppendFile(filePath, data, dataLength, encoding, s, f, c) {
+          window.WXWASMSDK.WXAppendFile(
+              _WXPointer_stringify_adaptor(filePath),
+              HEAPU8.slice(data, dataLength + data),
+              _WXPointer_stringify_adaptor(encoding),
+              _WXPointer_stringify_adaptor(s),
+              _WXPointer_stringify_adaptor(f),
+              _WXPointer_stringify_adaptor(c)
+          )
+      }
+
+  function _WXAppendStringFile(filePath, data, encoding, s, f, c) {
+          window.WXWASMSDK.WXAppendStringFile(
+              _WXPointer_stringify_adaptor(filePath),
+              _WXPointer_stringify_adaptor(data),
+              _WXPointer_stringify_adaptor(encoding),
+              _WXPointer_stringify_adaptor(s),
+              _WXPointer_stringify_adaptor(f),
+              _WXPointer_stringify_adaptor(c)
+          )
+      }
+
+  function _WXCameraCloseFrameChange(id) {
+          window.WXWASMSDK.WXCameraCloseFrameChange(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXCameraCreateCamera(option, callbackId) {
+          window.WXWASMSDK.WXCameraCreateCamera(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WXCameraDestroy(id) {
+          window.WXWASMSDK.WXCameraDestroy(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXCameraListenFrameChange(id) {
+          window.WXWASMSDK.WXCameraListenFrameChange(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXCameraOnAuthCancel(id) {
+          window.WXWASMSDK.WXCameraOnAuthCancel(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXCameraOnCameraFrame(id) {
+          window.WXWASMSDK.WXCameraOnCameraFrame(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXCameraOnStop(id) {
+          window.WXWASMSDK.WXCameraOnStop(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXCanIUse(key) {
+          if (!key || !_WXPointer_stringify_adaptor(key)) {
+              return false;
+          }
+          const keyString = _WXPointer_stringify_adaptor(key);
+          return typeof wx[keyString[0].toLowerCase() + keyString.slice(1)] !== 'undefined';
+      }
+
+  function _WXChatClose() {
+          window.WXWASMSDK.WXChatClose();
+      }
+
+  function _WXChatCreate(option) {
+          var returnStr = window.WXWASMSDK.WXChatCreate(_WXPointer_stringify_adaptor(option));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXChatHide() {
+          window.WXWASMSDK.WXChatHide();
+      }
+
+  function _WXChatOff(eventType) {
+          window.WXWASMSDK.WXChatOff(_WXPointer_stringify_adaptor(eventType));
+      }
+
+  function _WXChatOn(eventType) {
+          window.WXWASMSDK.WXChatOn(_WXPointer_stringify_adaptor(eventType));
+      }
+
+  function _WXChatOpen(pageKey) {
+          window.WXWASMSDK.WXChatOpen(_WXPointer_stringify_adaptor(pageKey));
+      }
+
+  function _WXChatSetSignature(signature) {
+          window.WXWASMSDK.WXChatSetSignature(_WXPointer_stringify_adaptor(signature));
+      }
+
+  function _WXChatSetTabs(pageKeys) {
+          window.WXWASMSDK.WXChatSetTabs(_WXPointer_stringify_adaptor(pageKeys));
+      }
+
+  function _WXChatShow(option) {
+          window.WXWASMSDK.WXChatShow(_WXPointer_stringify_adaptor(option));
+      }
+
+  function _WXCleanAllFileCache() {
+          var returnStr = window.WXWASMSDK.WXCleanAllFileCache();
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCleanFileCache(fileSize) {
+          var returnStr = window.WXWASMSDK.WXCleanFileCache(fileSize);
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCopyFile(srcPath, destPath, s, f, c) {
+          return window.WXWASMSDK.WXCopyFile(_WXPointer_stringify_adaptor(srcPath), _WXPointer_stringify_adaptor(destPath), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f), _WXPointer_stringify_adaptor(c));
+      }
+
+  function _WXCopyFileSync(srcPath, destPath) {
+          var returnStr = window.WXWASMSDK.WXCopyFileSync(_WXPointer_stringify_adaptor(srcPath), _WXPointer_stringify_adaptor(destPath));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCreateBannerAd(conf) {
+          var returnStr = window.WXWASMSDK.WXCreateBannerAd(_WXPointer_stringify_adaptor(conf));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCreateCustomAd(conf) {
+          var returnStr = window.WXWASMSDK.WXCreateCustomAd(_WXPointer_stringify_adaptor(conf));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCreateFixedBottomMiddleBannerAd(adUnitId, adIntervals, height) {
+          var returnStr = window.WXWASMSDK.WXCreateFixedBottomMiddleBannerAd(_WXPointer_stringify_adaptor(adUnitId), adIntervals, height);
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCreateGameClubButton(conf) {
+          var returnStr = window.WXWASMSDK.WXCreateGameClubButton(_WXPointer_stringify_adaptor(conf));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCreateInnerAudioContext(src, loop, startTime, autoplay, volume, playbackRate, needDownload) {
+          var returnStr = window.WXWASMSDK.WXCreateInnerAudioContext(_WXPointer_stringify_adaptor(src), loop, startTime, autoplay, volume, playbackRate, needDownload);
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCreateInterstitialAd(conf) {
+          var returnStr = window.WXWASMSDK.WXCreateInterstitialAd(_WXPointer_stringify_adaptor(conf));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCreateRewardedVideoAd(conf) {
+          var returnStr = window.WXWASMSDK.WXCreateRewardedVideoAd(_WXPointer_stringify_adaptor(conf));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCreateUserInfoButton(x, y, width, height, lang, withCredentials) {
+          var returnStr = window.WXWASMSDK.WXCreateUserInfoButton(x, y, width, height, _WXPointer_stringify_adaptor(lang), withCredentials);
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXCreateVideo(conf) {
+          var returnStr = window.WXWASMSDK.WXCreateVideo(_WXPointer_stringify_adaptor(conf));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXDataContextPostMessage(msg) {
+          window.WXWASMSDK.WXDataContextPostMessage(_WXPointer_stringify_adaptor(msg));
+      }
+
+  function _WXFSInit(ttl, capacity) {
+      function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return !!right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+      function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+      function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+      function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+      function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+      function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+      function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+      var WXMap = /*#__PURE__*/function () {
+        function WXMap(hash, rename) {
+          _classCallCheck(this, WXMap);
+          this.hash = hash;
+          this.rename = rename;
+          this.size = 0;
+        }
+        _createClass(WXMap, [{
+          key: "get",
+          value: function get(key) {
+            return this.hash.get(this.rename(key));
+          }
+        }, {
+          key: "set",
+          value: function set(key, value) {
+            this.delete(key);
+            this.size += value;
+            return this.hash.set(this.rename(key), value);
+          }
+        }, {
+          key: "has",
+          value: function has(key) {
+            return this.hash.has(this.rename(key));
+          }
+        }, {
+          key: "delete",
+          value: function _delete(key) {
+            this.size -= this.hash.get(this.rename(key))|0;
+            return this.hash.delete(this.rename(key));
+          }
+        }]);
+        return WXMap;
+      }();
+      WXFS.WXABErrorSteps = {
+        "kWebRequestResponse": 0,
+        "kLoadBundleFromFile": 1,
+        "kCacheGet" : 2
+      };
+      WXFS.disk = new WXMap(unityNamespace.WXAssetBundles,unityNamespace.PathInFileOS);
+      WXFS.msg = "";
+      WXFS.fd2wxStream = new Map;
+      WXFS.path2fd = new Map;
+      WXFS.refRecord = new Map;
+      WXFS.fs = wx.getFileSystemManager();
+      WXFS.nowfd = FS.MAX_OPEN_FDS + 1;
+      WXFS.isWXAssetBundle = function(url){
+        if(WXFS._url2path.has(url)||url.startsWith(GameGlobal.unityNamespace.DATA_CDN)||url.startsWith('/vfs_streamingassets')){
+          return unityNamespace.isWXAssetBundle(WXFS.url2path(url));
+        }
+        return unityNamespace.isWXAssetBundle(url);
+      }
+      WXFS.newfd = function(){
+        return WXFS.nowfd++;
+      }
+      WXFS.doWXAccess = function(path, amode){
+        if (amode & ~7) {
+          return -28;
+        }
+        try{
+          WXFS.fs.accessSync(path);
+        } catch(e){
+          return -44;
+        }
+        return 0
+      }
+      
+      var WXFileCache = /*#__PURE__*/function () {
+        function WXFileCache(ttl, capacity) {
+          _classCallCheck(this, WXFileCache);
+          this.ttl = ttl;
+          if (capacity > 0) this.capacity = capacity;
+          this.hash = new Map();
+          this.size = 0;
+          this.maxSize = 0;
+          this.obsolete = "";
+        }
+        // record obsolete file path when file not found
+        _createClass(WXFileCache, [{
+          key: "record",
+          value: function record(path) {
+            if (!this.obsolete.includes(path)) {
+              if (this.obsolete != "") this.obsolete += ";";
+              this.obsolete += path;
+            }
+          }
+        }, {
+          key: "get",
+          value: function get(key) {
+            var temp = this.hash.get(key);
+            if (temp !== undefined) {
+              this.hash.delete(key);
+              temp.time = Date.now();
+              this.hash.set(key, temp);
+              return temp.ab;
+            }
+            return -1;
+          }
+        }, {
+          key: "put",
+          value: function put(key, ab, cleanable) {
+            if(!ab)return;
+            cleanable = cleanable != undefined ? cleanable : true;
+            var value = {
+              ab: ab,
+              time: Date.now(),
+              cleanable: cleanable
+            };
+            var temp = this.hash.get(key);
+            if (temp !== undefined) {
+              this.size -= temp.ab.byteLength;
+              this.hash.delete(key);
+              this.hash.set(key, value);
+            } else {
+              if (this.capacity !== undefined && this.size >= this.capacity) {
+                var idx = this.hash.keys().next().value;
+                this.size -= idx.ab.byteLength;
+                this.hash.delete(idx);
+                this.hash.set(key, value);
+              } else {
+                this.hash.set(key, value);
+              }
+            }
+            this.size += value.ab.byteLength;
+            this.maxSize = Math.max(this.size, this.maxSize);
+          }
+        }, {
+          key: "cleanable",
+          value: function cleanable(key, _cleanable) {
+            _cleanable = _cleanable != undefined ? _cleanable : true;
+            var temp = this.hash.get(key);
+            if (temp !== undefined) {
+              // this.hash.delete(key);
+              // temp.time = Date.now();
+              temp.cleanable = _cleanable;
+              this.hash.set(key, temp);
+              return 0;
+            } else {
+              return -1;
+            }
+          }
+        }, {
+          key: "cleanbytime",
+          value: function cleanbytime(deadline) {
+            var iter = this.hash.keys(),
+              key,
+              value;
+            while ((key = iter.next().value) != undefined && (value = this.hash.get(key)).time < deadline) {
+              if (value.cleanable) {
+                this.size -= value.ab.byteLength;
+                this.hash.delete(key);
+              }
+            }
+          }
+        }, {
+          key: "RegularCleaning",
+          value: function RegularCleaning(kIntervalSecond) {
+            var _this = this;
+            setInterval(function () {
+              _this.cleanbytime(Date.now() - _this.ttl * 1000);
+            }, kIntervalSecond * 1000);
+          }
+        }, {
+          key: "delete",
+          value: function _delete(key) {
+              this.size -= this.hash.get(key).ab.byteLength;
+              return this.hash.delete(key)
+          }
+        }, {
+          key: "has",
+          value: function _has(key) {
+              return this.hash.has(key)
+          }
+        }
+        ]);
+        return WXFileCache;
+      }();
+      
+      WXFS.cache = new WXFileCache(ttl, capacity);
+      if(unityNamespace.isIOS && unityNamespace.isH5Renderer) {
+        WXFS.cache.RegularCleaning(1);
+      }
+  
+      WXFS.wxstat = function(path){
+        try {
+          var fd = WXFS.path2fd.get(path)
+          if (fd !== undefined){
+            var stat = {
+              mode: 33206,
+              size: WXFS.cache.get(fd).byteLength,
+              dev: 1,
+              ino: 1,
+              nlink: 1,
+              uid: 0,
+              gid: 0,
+              rdev: 0,
+              atime: new Date(),
+              mtime: new Date(0),
+              ctime: new Date(),
+              blksize: 4096
+            }
+            stat.blocks = Math.ceil(stat.size / stat.blksize);
+            return stat;
+          }
+          var stat = WXFS.fs.statSync(path);
+          // something not in wx.FileSystemManager, just fill in 0/1
+          stat.dev = 1;
+          stat.ino = 1;
+          stat.nlink = 1;
+          stat.uid = 0;
+          stat.gid = 0;
+          stat.rdev = 0;
+          stat.atime = new Date(stat.lastAccessedTime * 1000);
+          stat.mtime = new Date(0); // if update modified time, wasm will log error "Archive file was modified when opened"
+          stat.ctime = new Date(stat.lastModifiedTime * 1000); // time of permission modification, just use mtime to instand
+          delete stat.lastAccessedTime;
+          delete stat.lastModifiedTime;
+          stat.blksize = 4096;
+          stat.blocks = Math.ceil(stat.size / stat.blksize);
+          return stat;
+        } catch (e){
+          console.error(e)
+          throw e;
+        }
+      }
+      WXFS._url2path = new Map();
+      WXFS.url2path = function(url) {
+        if(WXFS._url2path.has(url)){
+          return WXFS._url2path.get(url);
+        }
+        url = url.replaceAll(' ', '%20')
+        if(url.startsWith('/vfs_streamingassets/')){
+          var path = url.replace('/vfs_streamingassets/', wx.env.USER_DATA_PATH + "/__GAME_FILE_CACHE/StreamingAssets/");
+        }
+        else{
+          var path = url.replace(GameGlobal.unityNamespace.DATA_CDN, wx.env.USER_DATA_PATH+'/__GAME_FILE_CACHE/');
+        }
+        if(path.indexOf('?') > -1){
+          path = path.substring(0,path.indexOf("?"));
+        }
+        WXFS._url2path.set(url, path);
+        return path;
+      };
+      WXFS.LoadBundleFromFile = function(path){
+        try {
+          var res = WXFS.fs.readFileSync(path);
+        } catch(e) {
+          var err_msg = !!e ? e.toString() : 'unknown';
+        }
+        var expected_size = WXFS.disk.get(path);
+        if(expected_size === 0){
+          WXFS.disk.set(path, res.byteLength);
+          expected_size = res.byteLength;
+        }
+        if(!res || res.byteLength != expected_size){
+          var wxab_error = {
+            stage: WXFS.WXABErrorSteps['kLoadBundleFromFile'],
+            path: path,
+            size: (!!res ? res.byteLength : 0),
+            expected_size: expected_size,
+            error: err_msg
+          };
+          GameGlobal.manager.reporter.wxAssetBundle.reportEmptyContent(wxab_error);
+          GameGlobal.manager.Logger.pluginLog('[WXAssetBundle]readFileSync at path ' + path + ' return size ' + (!!res?res.byteLength:0) + ', different from expected size ' + expected_size + ' error: ' + err_msg);
+          wx.setStorageSync("wxfs_unserviceable",true);
+          GameGlobal.onCrash();
+          return "";
+        }
+        return res;
+      };
+      WXFS.read = function(stream, buffer, offset, length, position){
+        var contents = WXFS.cache.get(stream.fd);
+        if (contents === -1) {
+          var res = WXFS.LoadBundleFromFile(stream.path);
+          WXFS.cache.put(stream.fd, res);
+          contents = res;
+        }
+        if (position >= stream.node.usedBytes) return 0;
+        var size = Math.min(stream.node.usedBytes - position, length);
+        assert(size >= 0);
+        buffer.set(new Uint8Array(contents.slice(position, position + size)), offset);
+        return size;
+      };
+    }
+
+  function _WXGameClubButtonAddListener(id, key) {
+          window.WXWASMSDK.WXGameClubButtonAddListener(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key));
+      }
+
+  function _WXGameClubButtonDestroy(id) {
+          window.WXWASMSDK.WXGameClubButtonDestroy(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXGameClubButtonHide(id) {
+          window.WXWASMSDK.WXGameClubButtonHide(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXGameClubButtonRemoveListener(id, key) {
+          window.WXWASMSDK.WXGameClubButtonRemoveListener(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key));
+      }
+
+  function _WXGameClubButtonSetProperty(id, key, value) {
+          window.WXWASMSDK.WXGameClubButtonSetProperty(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key), _WXPointer_stringify_adaptor(value));
+      }
+
+  function _WXGameClubButtonShow(id) {
+          window.WXWASMSDK.WXGameClubButtonShow(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXGameClubStyleChangeInt(id, key, value) {
+          window.WXWASMSDK.WXGameClubStyleChangeInt(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key), value);
+      }
+
+  function _WXGameClubStyleChangeStr(id, key, value) {
+          window.WXWASMSDK.WXGameClubStyleChangeStr(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key), _WXPointer_stringify_adaptor(value));
+      }
+
+  function _WXGetBundleFromXML(url, id, callback, needRetry){
+      needRetry = needRetry?needRetry:true;
+      var _url = UTF8ToString(url);
+      var _id = UTF8ToString(id);
+      var len = lengthBytesUTF8(_id) + 1;
+      var idPtr = _malloc(len);
+      stringToUTF8(_id, idPtr, len);
+      var xhr = new GameGlobal.unityNamespace.UnityLoader.UnityCache.XMLHttpRequest;
+      xhr.open('GET', _url, true);
+      xhr.responseType = "arraybuffer";
+      xhr.onload = function (e) {
+        if (xhr.status >= 400 && needRetry) {
+          setTimeout(function () {
+            _WXGetBundleFromXML(url, false);
+          }, 1000);
+          xhr=null;
+          return false;
+        }
+        if (callback) {
+          var kWebRequestOK = 0;
+          var kNoResponseBuffer = 1111;
+          var xhrByteArray = new Uint8Array(xhr.response);
+          if (xhrByteArray.length != 0) {
+            var arrayBuffer = xhr.response;
+            var path = WXFS.url2path(_url);
+            var numberfd = WXFS.path2fd.get(path);
+            if (numberfd == undefined) {
+              numberfd = WXFS.newfd();
+              WXFS.path2fd.set(path, numberfd);
+            }
+            var wxStream = WXFS.fd2wxStream.get(numberfd);
+            if (wxStream == undefined) {
+              wxStream = {
+                fd: numberfd,
+                path: path,
+                seekable: true,
+                position: 0,
+                stream_ops: MEMFS.stream_ops,
+                ungotten: [],
+                node:{mode:32768,usedBytes:xhrByteArray.length},
+                error: false
+              };
+              wxStream.stream_ops.read = WXFS.read;
+              WXFS.fd2wxStream.set(numberfd, wxStream);
+            }
+            WXFS.cache.put(numberfd, arrayBuffer, xhr.isReadFromCache);
+            WXFS.disk.set(path, xhrByteArray.length);
+            dynCall("viii", callback, [idPtr, kWebRequestOK, 0]);
+            if(xhr.isReadFromCache){
+              _free(idPtr);
+            }
+          } else {
+            dynCall('viii', callback, [idPtr, kNoResponseBuffer, 0]);
+            _free(idPtr);
+          }
+        }
+      };
+      xhr.onsave = function xhr_onsave(e){
+        WXFS.cache.cleanable(WXFS.path2fd.get(e));
+        _free(idPtr);
+      }
+      function XHRHandleError(err, code) {
+        if (needRetry) {
+          return setTimeout(function () {
+            _WXGetBundleFromXML(url, false);
+          }, 1e3);
+        }
+        if (callback) {
+          var len = lengthBytesUTF8(err) + 1;
+          var buffer = _malloc(len);
+          stringToUTF8(err, buffer, len);
+          dynCall("viii", callback, [idPtr, code, buffer]);
+          _free(buffer);
+          _free(idPtr);
+        }
+      }
+      xhr.onerror = function xhr_onerror(e) {
+        var kWebErrorUnknown = 2;
+        XHRHandleError("Unknown error.", kWebErrorUnknown);
+      };
+      xhr.ontimeout = function xhr_onerror(e) {
+        var kWebErrorTimeout = 14;
+        XHRHandleError("Connection timed out.", kWebErrorTimeout);
+      };
+      xhr.onabort = function xhr_onerror(e) {
+        var kWebErrorAborted = 17;
+        XHRHandleError("Aborted.", kWebErrorAborted);
+      }
+      xhr.send();
+    }
+
+  function _WXGetBundleNumberInMemory() { 
+      return WXFS&&WXFS.cache&&WXFS.cache.hash&&WXFS.cache.hash.size; 
+    }
+
+  function _WXGetBundleNumberOnDisk() { 
+      return WXFS&&WXFS.disk&&WXFS.disk.hash&&WXFS.disk.hash.size; 
+    }
+
+  function _WXGetBundleSizeInMemory() { 
+      return WXFS&&WXFS.cache&&WXFS.cache.size; 
+    }
+
+  function _WXGetBundleSizeOnDisk() { 
+      return WXFS&&WXFS.disk&&WXFS.disk.size; 
+    }
+
+  function _WXGetCachePath(url) {
+          var returnStr = window.WXWASMSDK.WXGetCachePath(_WXPointer_stringify_adaptor(url));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXGetDynamicMemorySize() {
+          if (typeof DYNAMIC_BASE !== "undefined") {
+            return HEAP32[DYNAMICTOP_PTR >> 2] - DYNAMIC_BASE
+          } 
+          var heap_base = 7936880;
+          if (typeof Module["___heap_base"] !== "undefined") {
+              heap_base = Module["___heap_base"];
+          }
+          var heap_end = _sbrk();
+          return heap_end - heap_base;
+      }
+
+  function _WXGetEXFrameTime() {
+          if(typeof GameGlobal.calcFrameTimeFunc == "undefined") 
+          {
+              GameGlobal.calcFrameTimeFunc = function () 
+              {
+                  var frameCount = 0;
+                  var exTotalTime = 0;
+                  return function update(frameStart, frameEnd) {
+                    frameCount++;
+                    exTotalTime += (frameEnd - frameStart);
+                    if (frameCount >= 60) {
+                      GameGlobal.avgExFrameTime = exTotalTime / 60;
+                      frameCount = 0;
+                      exTotalTime = 0;
+                    } else if (typeof GameGlobal.avgExFrameTime === "undefined") {
+                      GameGlobal.avgExFrameTime = exTotalTime / frameCount; 
+                    }
+                  };
+              }();
+              //Set initial value to 0 for preventing GameGlobal.avgExFrameTime from being undefined in Unity 2019
+              GameGlobal.avgExFrameTime = 0;
+          } 
+          return GameGlobal.avgExFrameTime
+      }
+
+  function _WXGetFontRawData(conf, callbackId) {
+          window.WXWASMSDK.WXGetFontRawData(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId))
+      }
+
+  function _WXGetOpenDataContext(mode) {
+          window.WXWASMSDK.WXGetOpenDataContext(_WXPointer_stringify_adaptor(mode));
+      }
+
+  function _WXGetPluginCachePath() {
+          var returnStr = window.WXWASMSDK.WXGetPluginCachePath();
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXGetStaticMemorySize() {
+          return STATICTOP - STATIC_BASE;
+      }
+
+  function _WXGetTotalMemorySize() {
+          if (typeof TOTAL_MEMORY !== "undefined") {
+              return TOTAL_MEMORY
+          }
+          if (wasmMemory && wasmMemory.buffer) {
+              return wasmMemory.buffer.byteLength;
+          }
+          console.error('Fail to find wasmMemory.buffer, TotalMemorySize is not correct.');
+          return 0;
+      }
+
+  function _WXGetTotalStackSize() {
+          return TOTAL_STACK;
+      }
+
+  function _WXGetUnAllocatedMemorySize() {
+          var heap_end = _sbrk()
+          return HEAP8.length - heap_end
+          return 0
+      }
+
+  function _WXGetUsedMemorySize() {
+           if (typeof emscriptenMemoryProfiler !== "undefined")  {
+              return  emscriptenMemoryProfiler.totalMemoryAllocated;
+          }
+      }
+
+  function _WXGetUserDataPath() {
+          var returnStr = window.WXWASMSDK.WXGetUserDataPath();
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXHideAd(id, s, f) {
+          window.WXWASMSDK.WXHideAd(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f));
+      }
+
+  function _WXHideLoadingPage() {
+          window.WXWASMSDK && window.WXWASMSDK.WXHideLoadingPage()
+      }
+
+  function _WXHideOpenData() {
+          window.WXWASMSDK.WXHideOpenData();
+      }
+
+  function _WXInitializeSDK(version) {
+          window.WXWASMSDK.WXInitializeSDK(_WXPointer_stringify_adaptor(version));
+          if (typeof emscriptenMemoryProfiler !== "undefined")  {
+              GameGlobal.memprofiler = emscriptenMemoryProfiler
+              GameGlobal.memprofiler.onDump = function () {
+              var fs = wx.getFileSystemManager();
+              var allocation_used = GameGlobal.memprofiler.allocationsAtLoc; 
+              if (typeof allocation_used === "undefined") allocation_used=GameGlobal.memprofiler.allocationSiteStatistics;
+              var calls = [];
+              for (var i in allocation_used) {
+                      calls.push(i);
+              }
+              calls.sort((function (a, b) {
+                  return allocation_used[b][1] - allocation_used[a][1];
+              }));
+  
+              console.log('WXDumpUnityHeap begin', Object.keys(allocation_used).length, calls.length);
+              wx.getFileSystemManager().open({
+                  filePath: wx.env.USER_DATA_PATH + '/alloc_used.csv',
+                  flag: 'w',
+                  success: function(res) {
+                      var wxfile = res.fd;
+                      fs.write({
+                          fd: wxfile,
+                          data:'callback;count;size;malloc;free\r\n',
+                          fail: function(res) {
+                              console.error(res);
+                          }
+                      })
+                      var errorCount = 0;
+                      for (var i = 0; i < 100000 && i < calls.length; ++i) {
+                          var callstack = calls[i];
+                          var item = allocation_used[callstack];
+                          if (typeof item === "undefined") {
+                              // console.error('callstack not fond', callstack);
+                              ++errorCount;
+                              continue
+                          }
+                          var posOfThisFunc = callstack.indexOf('emscripten_trace_record_') + "emscripten_trace_record_".length;
+                          if (posOfThisFunc != -1) callstack = callstack.substr(posOfThisFunc);
+                          var posOfRaf = callstack.lastIndexOf("InitWebGLPlayeriPPc ");
+                          if (posOfRaf != -1) callstack = callstack.substr(0, posOfRaf);
+                          posOfRaf = callstack.lastIndexOf("InitPlayerLoopCallbacks");
+                          if (posOfRaf != -1) callstack = callstack.substr(0, posOfRaf);
+  
+                          callstack = callstack.replace(/\(.*?\)/g, '')
+                          callstack = callstack.replace(/[A-Z0-9]{40}/g, '')
+                          callstack = callstack.replace(/\n/g, "<-")
+                          callstack = callstack.replace(/_malloc <-.*?MemLabelId15AllocateOptions/g, '')
+                          callstack = callstack.replace(/<-    at dynCall.*?at invoke_/g, '')
+                          fs.write({
+                              fd: wxfile,
+                              data: callstack + ';' + item[0] + ';' + item[1] + ';' + item[2] + ';' + item[3] + '\r\n',
+                              fail: function(res) {
+                                  console.error(res)
+                              }
+                          })
+                      }
+                      console.log("WXDumpUnityHeap end", errorCount)
+                  }
+              })
+          }
+          }
+      }
+
+  function _WXInnerAudioContextAddListener(id, key) {
+          window.WXWASMSDK.WXInnerAudioContextAddListener(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key));
+      }
+
+  function _WXInnerAudioContextDestroy(id) {
+          window.WXWASMSDK.WXInnerAudioContextDestroy(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXInnerAudioContextGetBool(id, k) {
+          return window.WXWASMSDK.WXInnerAudioContextGetBool(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(k));
+      }
+
+  function _WXInnerAudioContextGetFloat(id, k) {
+          return window.WXWASMSDK.WXInnerAudioContextGetFloat(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(k));
+      }
+
+  function _WXInnerAudioContextPause(id) {
+          window.WXWASMSDK.WXInnerAudioContextPause(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXInnerAudioContextPlay(id) {
+          window.WXWASMSDK.WXInnerAudioContextPlay(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXInnerAudioContextRemoveListener(id, key) {
+          window.WXWASMSDK.WXInnerAudioContextRemoveListener(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key));
+      }
+
+  function _WXInnerAudioContextSeek(id, position) {
+          window.WXWASMSDK.WXInnerAudioContextSeek(_WXPointer_stringify_adaptor(id), position);
+      }
+
+  function _WXInnerAudioContextSetBool(id, k, v) {
+          window.WXWASMSDK.WXInnerAudioContextSetBool(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(k), v);
+      }
+
+  function _WXInnerAudioContextSetFloat(id, k, v) {
+          window.WXWASMSDK.WXInnerAudioContextSetFloat(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(k), v);
+      }
+
+  function _WXInnerAudioContextSetString(id, k, v) {
+          window.WXWASMSDK.WXInnerAudioContextSetString(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(k), _WXPointer_stringify_adaptor(v));
+      }
+
+  function _WXInnerAudioContextStop(id) {
+          window.WXWASMSDK.WXInnerAudioContextStop(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXIsCloudTest(){
+          return window.WXWASMSDK.WXIsCloudTest();
+      }
+
+  function _WXLaunchOperaBridge(req) {
+          var res = window.WXWASMSDK.WXLaunchOperaBridge(_WXPointer_stringify_adaptor(req));
+          if (res) {
+              var bufferSize = lengthBytesUTF8(res) + 1;
+              var buffer = _malloc(bufferSize);
+              stringToUTF8(res, buffer, bufferSize);
+              return buffer;
+          }
+      }
+
+  function _WXLogManagerDebug(str){
+          window.WXWASMSDK.WXLogManagerDebug(
+              _WXPointer_stringify_adaptor(str)
+          );
+      }
+
+  function _WXLogManagerInfo(str){
+          window.WXWASMSDK.WXLogManagerInfo(
+              _WXPointer_stringify_adaptor(str)
+          );
+      }
+
+  function _WXLogManagerLog(str){
+          window.WXWASMSDK.WXLogManagerLog(
+              _WXPointer_stringify_adaptor(str)
+          );
+      }
+
+  function _WXLogManagerWarn(str){
+          window.WXWASMSDK.WXLogManagerWarn(
+              _WXPointer_stringify_adaptor(str)
+          );
+      }
+
+  function _WXMkdir(dirPath, recursive, s,  f,  c){
+          window.WXWASMSDK.WXMkdir(_WXPointer_stringify_adaptor(dirPath), recursive, _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f), _WXPointer_stringify_adaptor(c));
+      }
+
+  function _WXMkdirSync(dirPath, recursive) {
+          var returnStr = window.WXWASMSDK.WXMkdirSync(_WXPointer_stringify_adaptor(dirPath),recursive);
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXOnLaunchProgress() {
+          var returnStr = window.WXWASMSDK.WXOnLaunchProgress();
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXOnShareAppMessage(conf, isPromise) {
+          return window.WXWASMSDK.WXOnShareAppMessage(_WXPointer_stringify_adaptor(conf), isPromise);
+      }
+
+  function _WXOnShareAppMessageResolve(conf) {
+          return window.WXWASMSDK.WXOnShareAppMessageResolve(_WXPointer_stringify_adaptor(conf));
+      }
+
+  function _WXOpenDataToTempFilePath(conf, s, f, c) {
+          window.WXWASMSDK.WXOpenDataToTempFilePath(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f), _WXPointer_stringify_adaptor(c))
+      }
+
+  function _WXOpenDataToTempFilePathSync(conf) {
+          var returnStr = window.WXWASMSDK.WXOpenDataToTempFilePathSync(_WXPointer_stringify_adaptor(conf));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXPointer_stringify_adaptor(str){
+          if (typeof UTF8ToString !== "undefined") {
+              return UTF8ToString(str)
+          }
+          return Pointer_stringify(str)
+      }
+
+  function _WXPreDownloadAudios(paths, id) {
+          window.WXWASMSDK.WXPreDownloadAudios(_WXPointer_stringify_adaptor(paths), id);
+      }
+
+  function _WXPreloadConcurrent(count) {
+          window.WXWASMSDK.WXPreloadConcurrent(count);
+      }
+
+  function _WXProfilingMemoryDump() {
+          if (typeof emscriptenMemoryProfiler !== "undefined")  {
+              GameGlobal.memprofiler.onDump();
+              wx.showModal({
+                  title: 'ProfilingMemory',
+                  content: 'OnDump Complete!'
+              });
+              return;
+          }
+          console.error('Please call WX.InitSDK & Select ProfilingMemory Option')  
+      }
+
+  function _WXReadFile(option, callbackId) {
+          window.WXWASMSDK.WXReadFile(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WXReadFileSync(option) {
+          var returnStr = window.WXWASMSDK.WXReadFileSync(_WXPointer_stringify_adaptor(option));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXRemoveFile(path) {
+          var returnStr = window.WXWASMSDK.WXRemoveFile(_WXPointer_stringify_adaptor(path));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXReportGameSceneError(sceneId, errorType, errStr, extJsonStr) {
+          window.WXWASMSDK.WXReportGameSceneError(sceneId, errorType, _WXPointer_stringify_adaptor(errStr), _WXPointer_stringify_adaptor(extJsonStr));
+      }
+
+  function _WXReportGameStart() {
+          window.WXWASMSDK.WXReportGameStart();
+      }
+
+  function _WXReportUserBehaviorBranchAnalytics(branchId, branchDim, eventType) {
+          window.WXWASMSDK.WXReportUserBehaviorBranchAnalytics(_WXPointer_stringify_adaptor(branchId), _WXPointer_stringify_adaptor(branchDim), eventType);
+      }
+
+  function _WXRewardedVideoAdReportShareBehavior(id, conf) {
+          var returnStr = window.WXWASMSDK.WXReportShareBehavior(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(conf));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXRmdir(dirPath, recursive, s, f, c) {
+          window.WXWASMSDK.WXRmdir(_WXPointer_stringify_adaptor(dirPath), recursive, _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f), _WXPointer_stringify_adaptor(c));
+      }
+
+  function _WXRmdirSync(dirPath, recursive) {
+          var returnStr = window.WXWASMSDK.WXRmdirSync(_WXPointer_stringify_adaptor(dirPath),recursive);
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXSetArrayBuffer(offset,callbackId){
+          window.WXWASMSDK.WXSetArrayBuffer(
+              HEAPU8,
+              offset,
+              _WXPointer_stringify_adaptor(callbackId)
+          )
+      }
+
+  function _WXSetDataCDN(path) {
+          window.WXWASMSDK.WXSetDataCDN(_WXPointer_stringify_adaptor(path));
+      }
+
+  function _WXSetPreloadList(paths) {
+          window.WXWASMSDK.WXSetPreloadList(_WXPointer_stringify_adaptor(paths));
+      }
+
+  function _WXSetSyncReadCacheEnabled(enabled) {
+          window.WXWASMSDK.WXSetSyncReadCacheEnabled(enabled);
+      }
+
+  function _WXShareFontBuffer(offset,callbackId){
+          window.WXWASMSDK.WXShareFontBuffer(
+              HEAPU8,
+              offset,
+              _WXPointer_stringify_adaptor(callbackId)
+          )
+      }
+
+  function _WXShowAd(id, s, f) {
+          window.WXWASMSDK.WXShowAd(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f));
+      }
+
+  function _WXShowAd2(id,branchId,branchDim, s, f) {
+          window.WXWASMSDK.WXShowAd2(_WXPointer_stringify_adaptor(id),_WXPointer_stringify_adaptor(branchId),_WXPointer_stringify_adaptor(branchDim), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f));
+      }
+
+  function _WXShowOpenData(id, x, y, width, height) {
+          window.WXWASMSDK.WXShowOpenData(id, x, y, width, height);
+      }
+
+  function _WXStat(conf, callbackId) {
+          window.WXWASMSDK.WXStat(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId))
+      }
+
+  function _WXStorageDeleteAllSync() {
+          window.WXWASMSDK.WXStorageDeleteAllSync();
+      }
+
+  function _WXStorageDeleteKeySync(key) {
+          window.WXWASMSDK.WXStorageDeleteKeySync(_WXPointer_stringify_adaptor(key));
+      }
+
+  function _WXStorageGetFloatSync(key, defaultValue) {
+          return window.WXWASMSDK.WXStorageGetFloatSync(_WXPointer_stringify_adaptor(key), defaultValue);
+      }
+
+  function _WXStorageGetIntSync(key, defaultValue) {
+          return window.WXWASMSDK.WXStorageGetIntSync(_WXPointer_stringify_adaptor(key), defaultValue);
+      }
+
+  function _WXStorageGetStringSync(key, defaultValue) {
+          var returnStr = window.WXWASMSDK.WXStorageGetStringSync(_WXPointer_stringify_adaptor(key), _WXPointer_stringify_adaptor(defaultValue));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXStorageHasKeySync(key) {
+          return window.WXWASMSDK.WXStorageHasKeySync(_WXPointer_stringify_adaptor(key));
+      }
+
+  function _WXStorageSetFloatSync(key, value) {
+          window.WXWASMSDK.WXStorageSetFloatSync(_WXPointer_stringify_adaptor(key), value);
+      }
+
+  function _WXStorageSetIntSync(key, value) {
+          window.WXWASMSDK.WXStorageSetIntSync(_WXPointer_stringify_adaptor(key), value);
+      }
+
+  function _WXStorageSetStringSync(key, value) {
+          window.WXWASMSDK.WXStorageSetStringSync(_WXPointer_stringify_adaptor(key), _WXPointer_stringify_adaptor(value));
+      }
+
+  function _WXToTempFilePath(conf, s, f, c) {
+          window.WXWASMSDK.WXToTempFilePath(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f), _WXPointer_stringify_adaptor(c))
+      }
+
+  function _WXToTempFilePathSync(conf) {
+          var returnStr = window.WXWASMSDK.WXToTempFilePathSync(_WXPointer_stringify_adaptor(conf));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXUncaughtException() {
+         window.WXWASMSDK.WXUncaughtException(false);
+      }
+
+  function _WXUnlink(filePath, s, f, c) {
+          return window.WXWASMSDK.WXUnlink(_WXPointer_stringify_adaptor(filePath), _WXPointer_stringify_adaptor(s), _WXPointer_stringify_adaptor(f), _WXPointer_stringify_adaptor(c));
+      }
+
+  function _WXUnlinkSync(filePath) {
+          var returnStr = window.WXWASMSDK.WXUnlinkSync(_WXPointer_stringify_adaptor(filePath));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXUploadTaskAbort(id){
+          window.WXWASMSDK.WXUploadTaskAbort(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXUploadTaskOffHeadersReceived(id){
+          window.WXWASMSDK.WXUploadTaskOffHeadersReceived(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXUploadTaskOffProgressUpdate(id){
+          window.WXWASMSDK.WXUploadTaskOffProgressUpdate(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXUploadTaskOnHeadersReceived(id){
+          window.WXWASMSDK.WXUploadTaskOnHeadersReceived(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXUploadTaskOnProgressUpdate(id){
+          window.WXWASMSDK.WXUploadTaskOnProgressUpdate(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXUserInfoButtonDestroy(id) {
+          window.WXWASMSDK.WXUserInfoButtonDestroy(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXUserInfoButtonHide(id) {
+          window.WXWASMSDK.WXUserInfoButtonHide(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXUserInfoButtonOffTap(id) {
+          window.WXWASMSDK.WXUserInfoButtonOffTap(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXUserInfoButtonOnTap(id) {
+          window.WXWASMSDK.WXUserInfoButtonOnTap(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXUserInfoButtonShow(id) {
+          window.WXWASMSDK.WXUserInfoButtonShow(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXVideoAddListener(id, key) {
+          window.WXWASMSDK.WXVideoAddListener(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key));
+      }
+
+  function _WXVideoDestroy(id, isLast) {
+          window.WXWASMSDK.WXVideoDestroy(_WXPointer_stringify_adaptor(id), isLast);
+      }
+
+  function _WXVideoExitFullScreen(id) {
+          window.WXWASMSDK.WXVideoExitFullScreen(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXVideoPause(id){
+          window.WXWASMSDK.WXVideoPause(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXVideoPlay(id) {
+          window.WXWASMSDK.WXVideoPlay(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXVideoRemoveListener(id,key){
+          window.WXWASMSDK.WXVideoRemoveListener(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key));
+      }
+
+  function _WXVideoRequestFullScreen(id,direction){
+          window.WXWASMSDK.WXVideoRequestFullScreen(_WXPointer_stringify_adaptor(id),direction);
+      }
+
+  function _WXVideoSeek(id,time){
+          window.WXWASMSDK.WXVideoSeek(_WXPointer_stringify_adaptor(id),time);
+      }
+
+  function _WXVideoSetProperty(id, key, value) {
+          window.WXWASMSDK.WXVideoSetProperty(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key), _WXPointer_stringify_adaptor(value));
+      }
+
+  function _WXVideoStop(id){
+         window.WXWASMSDK.WXVideoStop(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WXWriteBinFileSync(filePath, data, dataLength, encoding) {
+          var returnStr = window.WXWASMSDK.WXWriteBinFileSync(
+              _WXPointer_stringify_adaptor(filePath),
+              HEAPU8.slice(data, dataLength + data),
+              _WXPointer_stringify_adaptor(encoding)
+          );
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXWriteFile(filePath, data, dataLength, encoding, s, f, c) {
+          window.WXWASMSDK.WXWriteFile(
+              _WXPointer_stringify_adaptor(filePath),
+              HEAPU8.slice(data, dataLength + data),
+              _WXPointer_stringify_adaptor(encoding),
+              _WXPointer_stringify_adaptor(s),
+              _WXPointer_stringify_adaptor(f),
+              _WXPointer_stringify_adaptor(c)
+          )
+      }
+
+  function _WXWriteFileSync(filePath, data, encoding) {
+          var returnStr = window.WXWASMSDK.WXWriteFileSync(_WXPointer_stringify_adaptor(filePath), _WXPointer_stringify_adaptor(data), _WXPointer_stringify_adaptor(encoding));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WXWriteLog(str) {
+          window.WXWASMSDK.WXWriteLog(_WXPointer_stringify_adaptor(str))
+      }
+
+  function _WXWriteStringFile(filePath,data,encoding, s, f, c) {
+          window.WXWASMSDK.WXWriteStringFile(
+              _WXPointer_stringify_adaptor(filePath),
+              _WXPointer_stringify_adaptor(data),
+              _WXPointer_stringify_adaptor(encoding),
+              _WXPointer_stringify_adaptor(s),
+              _WXPointer_stringify_adaptor(f),
+              _WXPointer_stringify_adaptor(c)
+          )
+      }
+
+  function _WXWriteWarn(str) {
+          window.WXWASMSDK.WXWriteWarn(_WXPointer_stringify_adaptor(str))
+      }
+
+  function _WX_CallJSFunction(sdkName, functionName, args) {
+          var sdk = _WXPointer_stringify_adaptor(sdkName);
+          var func = _WXPointer_stringify_adaptor(functionName);
+          var formattedArgs = JSON.parse(_WXPointer_stringify_adaptor(args));
+          GameGlobal[sdk][func].apply(GameGlobal[sdk], formattedArgs);
+      }
+
+  function _WX_CallJSFunctionWithReturn(sdkName, functionName, args) {
+          var sdk = _WXPointer_stringify_adaptor(sdkName);
+          var func = _WXPointer_stringify_adaptor(functionName);
+          var formattedArgs = JSON.parse(_WXPointer_stringify_adaptor(args));
+          var res = GameGlobal[sdk][func].apply(GameGlobal[sdk], formattedArgs);
+          var resStr = JSON.stringify(res);
+          var bufferSize = lengthBytesUTF8(resStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8((resStr || ''), buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_ClassConstructor(functionName, returnType, successType, failType, completeType, conf) {
+      var res = window.WXWASMSDK.WX_ClassConstructor(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(returnType), _WXPointer_stringify_adaptor(successType), _WXPointer_stringify_adaptor(failType), _WXPointer_stringify_adaptor(completeType), _WXPointer_stringify_adaptor(conf));
+      var bufferSize = lengthBytesUTF8(res || '') + 1;
+      var buffer = _malloc(bufferSize);
+      stringToUTF8((res || ''), buffer, bufferSize);
+      return buffer;
+  }
+
+  function _WX_ClassFunction(functionName, returnType, option) {
+      var res = window.WXWASMSDK.WX_ClassFunction(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(returnType), _WXPointer_stringify_adaptor(option));
+      var bufferSize = lengthBytesUTF8(res || '') + 1;
+      var buffer = _malloc(bufferSize);
+      stringToUTF8((res || ''), buffer, bufferSize);
+      return buffer;
+  }
+
+  function _WX_ClassOffEventFunction(className, functionName, id, eventType) {
+      window.WXWASMSDK.WX_ClassOffEventFunction(_WXPointer_stringify_adaptor(className), _WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(eventType));
+  }
+
+  function _WX_ClassOnEventFunction(className, functionName, returnType, id, eventName) {
+      window.WXWASMSDK.WX_ClassOnEventFunction(_WXPointer_stringify_adaptor(className), _WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(returnType), _WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(eventName));
+  }
+
+  function _WX_ClassOneWayFunction(className, id, functionName, successType, failType, completeType, conf, callbackId, usePromise) {
+      window.WXWASMSDK.WX_ClassOneWayFunction(_WXPointer_stringify_adaptor(className), _WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(successType), _WXPointer_stringify_adaptor(failType), _WXPointer_stringify_adaptor(completeType), _WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId), usePromise);
+  }
+
+  function _WX_ClassOneWayNoFunction_t(className, functionName, returnType, id) {
+      var res = window.WXWASMSDK.WX_ClassOneWayNoFunction_t(_WXPointer_stringify_adaptor(className), _WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(returnType), _WXPointer_stringify_adaptor(id));
+      var bufferSize = lengthBytesUTF8(res || '') + 1;
+      var buffer = _malloc(bufferSize);
+      stringToUTF8((res || ''), buffer, bufferSize);
+      return buffer;
+  }
+
+  function _WX_ClassOneWayNoFunction_v(className, functionName, id) {
+      window.WXWASMSDK.WX_ClassOneWayNoFunction_v(_WXPointer_stringify_adaptor(className), _WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(id));
+  }
+
+  function _WX_ClassOneWayNoFunction_vn(className, functionName, id, param1) {
+      window.WXWASMSDK.WX_ClassOneWayNoFunction_vs(_WXPointer_stringify_adaptor(className), _WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(id), param1);
+  }
+
+  function _WX_ClassOneWayNoFunction_vs(className, functionName, id, param1) {
+      window.WXWASMSDK.WX_ClassOneWayNoFunction_vs(_WXPointer_stringify_adaptor(className), _WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(param1));
+  }
+
+  function _WX_ClassOneWayNoFunction_vt(className, functionName, id, param1) {
+      window.WXWASMSDK.WX_ClassOneWayNoFunction_vt(_WXPointer_stringify_adaptor(className), _WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(param1));
+  }
+
+  function _WX_ClassSetProperty(className, id, key, value) {
+    window.WXWASMSDK.WX_ClassSetProperty(_WXPointer_stringify_adaptor(className), _WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(key), _WXPointer_stringify_adaptor(value));
+  }
+
+  function _WX_CloudCDNBuffer(env, targetPtr, targetLength) {
+          var returnStr = window.WXWASMSDK.WX_CloudCDN(_WXPointer_stringify_adaptor(env), HEAPU8.buffer.slice(targetPtr, targetPtr + targetLength));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_CloudCDNString(env, target, isJSON) {
+          if (isJSON) {
+              target = JSON.parse(_WXPointer_stringify_adaptor(target));
+          } else {
+              target = _WXPointer_stringify_adaptor(target);
+          }
+          var returnStr = window.WXWASMSDK.WX_CloudCDN(_WXPointer_stringify_adaptor(env), target);
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_CloudCallContainer(env, option, callbackId) {
+          window.WXWASMSDK.WX_CloudCallContainer(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_CloudCallFunction(env, option, callbackId) {
+          window.WXWASMSDK.WX_CloudCallFunction(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_CloudCloud(option) {
+          window.WXWASMSDK.WX_CloudCloud(_WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_CloudCloudID(env, cloudID) {
+          var returnStr = window.WXWASMSDK.WX_CloudCloudID(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(cloudID));
+          var bufferSize = lengthBytesUTF8(returnStr || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(returnStr, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_CloudDeleteFile(env, option, callbackId) {
+          window.WXWASMSDK.WX_CloudDeleteFile(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_CloudDownloadFile(env, option, callbackId) {
+          window.WXWASMSDK.WX_CloudDownloadFile(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_CloudGetTempFileURL(env, option, callbackId) {
+          window.WXWASMSDK.WX_CloudGetTempFileURL(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_CloudInit(option) {
+          window.WXWASMSDK.WX_CloudInit(_WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_CloudUploadFile(env, option, callbackId) {
+          window.WXWASMSDK.WX_CloudUploadFile(_WXPointer_stringify_adaptor(env), _WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_CreateTCPSocket() {
+          var res = window.WXWASMSDK.WX_CreateTCPSocket();
+          var bufferSize = lengthBytesUTF8(res || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_CreateUDPSocket() {
+          var res = window.WXWASMSDK.WX_CreateUDPSocket();
+          var bufferSize = lengthBytesUTF8(res || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_FileSystemManagerAppendFileStringSync(filePath, data, encoding) {
+          window.WXWASMSDK.WX_FileSystemManagerAppendFileStringSync(_WXPointer_stringify_adaptor(filePath), _WXPointer_stringify_adaptor(data), _WXPointer_stringify_adaptor(encoding));
+      }
+
+  function _WX_FileSystemManagerAppendFileSync(filePath, data, dataLength, encoding) {
+          window.WXWASMSDK.WX_FileSystemManagerAppendFileSync(
+              _WXPointer_stringify_adaptor(filePath),
+              HEAPU8.slice(data, dataLength + data),
+              _WXPointer_stringify_adaptor(encoding)
+          );
+      }
+
+  function _WX_FileSystemManagerClose(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerClose(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerCloseSync(option) {
+          window.WXWASMSDK.WX_FileSystemManagerCloseSync(_WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_FileSystemManagerFstat(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerFstat(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerFstatSync(option) {
+          var res = window.WXWASMSDK.WX_FileSystemManagerFstatSync(_WXPointer_stringify_adaptor(option));
+          var bufferSize = lengthBytesUTF8(res) + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_FileSystemManagerFtruncate(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerFtruncate(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerFtruncateSync(option) {
+          window.WXWASMSDK.WX_FileSystemManagerFtruncateSync(_WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_FileSystemManagerGetFileInfo(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerGetFileInfo(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerGetSavedFileList(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerGetSavedFileList(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerOpen(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerOpen(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerOpenSync(option) {
+          var res = window.WXWASMSDK.WX_FileSystemManagerOpenSync(_WXPointer_stringify_adaptor(option));
+          var bufferSize = lengthBytesUTF8(res) + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_FileSystemManagerRead(option, data, dataLength, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerRead(_WXPointer_stringify_adaptor(option), HEAPU8.slice(data, dataLength + data), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerReadCompressedFileSync(option, callbackId) {
+          var res = window.WXWASMSDK.WX_FileSystemManagerReadCompressedFileSync(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+          var bufferSize = lengthBytesUTF8(res) + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_FileSystemManagerReadSync(option, callbackId) {
+          var res = window.WXWASMSDK.WX_FileSystemManagerReadSync(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+          var bufferSize = lengthBytesUTF8(res) + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_FileSystemManagerReadZipEntry(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerReadZipEntry(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerReadZipEntryString(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerReadZipEntryString(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerReaddir(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerReaddir(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerReaddirSync(dirPath) {
+          var res = window.WXWASMSDK.WX_FileSystemManagerReaddirSync(_WXPointer_stringify_adaptor(dirPath));
+          var bufferSize = lengthBytesUTF8(res) + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_FileSystemManagerRemoveSavedFile(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerRemoveSavedFile(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerRename(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerRename(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerRenameSync(oldPath, newPath) {
+          window.WXWASMSDK.WX_FileSystemManagerRenameSync(_WXPointer_stringify_adaptor(oldPath), _WXPointer_stringify_adaptor(newPath));
+      }
+
+  function _WX_FileSystemManagerSaveFile(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerSaveFile(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerSaveFileSync(tempFilePath, filePath) {
+          var res = window.WXWASMSDK.WX_FileSystemManagerSaveFileSync(_WXPointer_stringify_adaptor(tempFilePath), _WXPointer_stringify_adaptor(filePath));
+          var bufferSize = lengthBytesUTF8(res) + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_FileSystemManagerStatSync(path, recursive) {
+          var res = window.WXWASMSDK.WX_FileSystemManagerStatSync(_WXPointer_stringify_adaptor(path), recursive);
+          var bufferSize = lengthBytesUTF8(res) + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_FileSystemManagerTruncate(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerTruncate(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerTruncateSync(option) {
+          window.WXWASMSDK.WX_FileSystemManagerTruncateSync(_WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_FileSystemManagerUnzip(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerUnzip(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerWrite(option, data, dataLength, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerWrite(_WXPointer_stringify_adaptor(option), HEAPU8.slice(data, dataLength + data), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerWriteString(option, callbackId) {
+          window.WXWASMSDK.WX_FileSystemManagerWriteString(_WXPointer_stringify_adaptor(option), _WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_FileSystemManagerWriteStringSync(option) {
+          var res = window.WXWASMSDK.WX_FileSystemManagerWriteStringSync(_WXPointer_stringify_adaptor(option));
+          var bufferSize = lengthBytesUTF8(res) + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_FileSystemManagerWriteSync(option, data, dataLength) {
+          var res = window.WXWASMSDK.WX_FileSystemManagerWriteSync(_WXPointer_stringify_adaptor(option), HEAPU8.slice(data, dataLength + data));
+          var bufferSize = lengthBytesUTF8(res) + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_GameRecorderAbort(id){
+          window.WXWASMSDK.WX_GameRecorderAbort(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_GameRecorderOff(id, eventType){
+          window.WXWASMSDK.WX_GameRecorderOff(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(eventType));
+      }
+
+  function _WX_GameRecorderOn(id, eventType){
+          window.WXWASMSDK.WX_GameRecorderOn(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(eventType));
+      }
+
+  function _WX_GameRecorderPause(id){
+          window.WXWASMSDK.WX_GameRecorderPause(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_GameRecorderResume(id){
+          window.WXWASMSDK.WX_GameRecorderResume(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_GameRecorderStart(id,option){
+          window.WXWASMSDK.WX_GameRecorderStart(_WXPointer_stringify_adaptor(id),_WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_GameRecorderStop(id){
+          window.WXWASMSDK.WX_GameRecorderStop(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_GetGameRecorder() {
+          var res = window.WXWASMSDK.WX_GetGameRecorder();
+          var bufferSize = lengthBytesUTF8(res || '') + 1;
+          var buffer = _malloc(bufferSize);
+          stringToUTF8(res, buffer, bufferSize);
+          return buffer;
+      }
+
+  function _WX_GetRecorderManager(
+      ){
+              var res = window.WXWASMSDK.WX_GetRecorderManager();
+              var bufferSize = lengthBytesUTF8(res || '') + 1;
+              var buffer = _malloc(bufferSize);
+              stringToUTF8(res, buffer, bufferSize);
+              return buffer;
+      }
+
+  function _WX_OffAddToFavorites() {
+      window.WXWASMSDK.WX_OffAddToFavorites();
+  }
+
+  function _WX_OffBLECharacteristicValueChange() {
+          window.WXWASMSDK.WX_OffBLECharacteristicValueChange();
+      }
+
+  function _WX_OffCopyUrl() {
+      window.WXWASMSDK.WX_OffCopyUrl();
+  }
+
+  function _WX_OffEventRegister(functionName) {
+      window.WXWASMSDK.WX_OffEventRegister(_WXPointer_stringify_adaptor(functionName));
+  }
+
+  function _WX_OffGameLiveStateChange() {
+      window.WXWASMSDK.WX_OffGameLiveStateChange();
+  }
+
+  function _WX_OffGyroscopeChange() {
+          window.WXWASMSDK.WX_OffGyroscopeChange();
+      }
+
+  function _WX_OffHandoff() {
+      window.WXWASMSDK.WX_OffHandoff();
+  }
+
+  function _WX_OffShareTimeline() {
+      window.WXWASMSDK.WX_OffShareTimeline();
+  }
+
+  function _WX_OffTouchCancel() {
+        window.WXWASMSDK.WX_OffTouchCancel();
+    }
+
+  function _WX_OffTouchEnd() {
+        window.WXWASMSDK.WX_OffTouchEnd();
+    }
+
+  function _WX_OffTouchMove() {
+        window.WXWASMSDK.WX_OffTouchMove();
+    }
+
+  function _WX_OffTouchStart() {
+        window.WXWASMSDK.WX_OffTouchStart();
+    }
+
+  function _WX_OnAddToFavorites() {
+      window.WXWASMSDK.WX_OnAddToFavorites();
+  }
+
+  function _WX_OnAddToFavorites_Resolve(conf){
+      window.WXWASMSDK.WX_OnAddToFavorites_Resolve(_WXPointer_stringify_adaptor(conf));
+  }
+
+  function _WX_OnBLECharacteristicValueChange() {
+          window.WXWASMSDK.WX_OnBLECharacteristicValueChange();
+      }
+
+  function _WX_OnCopyUrl() {
+      window.WXWASMSDK.WX_OnCopyUrl();
+  }
+
+  function _WX_OnCopyUrl_Resolve(conf){
+      window.WXWASMSDK.WX_OnCopyUrl_Resolve(_WXPointer_stringify_adaptor(conf));
+  }
+
+  function _WX_OnEventRegister(functionName, resType) {
+      window.WXWASMSDK.WX_OnEventRegister(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(resType));
+  }
+
+  function _WX_OnGameLiveStateChange() {
+      window.WXWASMSDK.WX_OnGameLiveStateChange();
+  }
+
+  function _WX_OnGameLiveStateChange_Resolve(conf){
+      window.WXWASMSDK.WX_OnGameLiveStateChange_Resolve(_WXPointer_stringify_adaptor(conf));
+  }
+
+  function _WX_OnGyroscopeChange() {
+          window.WXWASMSDK.WX_OnGyroscopeChange();
+      }
+
+  function _WX_OnHandoff() {
+      window.WXWASMSDK.WX_OnHandoff();
+  }
+
+  function _WX_OnHandoff_Resolve(conf){
+      window.WXWASMSDK.WX_OnHandoff_Resolve(_WXPointer_stringify_adaptor(conf));
+  }
+
+  function _WX_OnNeedPrivacyAuthorization() {
+          window.WXWASMSDK.WX_OnNeedPrivacyAuthorization();
+      }
+
+  function _WX_OnRecorderError(id){
+          window.WXWASMSDK.WX_OnRecorderError(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_OnRecorderFrameRecorded(id){
+          window.WXWASMSDK.WX_OnRecorderFrameRecorded(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_OnRecorderInterruptionBegin(id){
+          window.WXWASMSDK.WX_OnRecorderInterruptionBegin(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_OnRecorderInterruptionEnd(id){
+          window.WXWASMSDK.WX_OnRecorderInterruptionEnd(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_OnRecorderPause(id){
+          window.WXWASMSDK.WX_OnRecorderPause(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_OnRecorderResume(id){
+          window.WXWASMSDK.WX_OnRecorderResume(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_OnRecorderStart(id){
+          window.WXWASMSDK.WX_OnRecorderStart(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_OnRecorderStop(id){
+          window.WXWASMSDK.WX_OnRecorderStop(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_OnShareTimeline() {
+      window.WXWASMSDK.WX_OnShareTimeline();
+  }
+
+  function _WX_OnShareTimeline_Resolve(conf){
+      window.WXWASMSDK.WX_OnShareTimeline_Resolve(_WXPointer_stringify_adaptor(conf));
+  }
+
+  function _WX_OnTouchCancel() {
+        window.WXWASMSDK.WX_OnTouchCancel();
+    }
+
+  function _WX_OnTouchEnd() {
+        window.WXWASMSDK.WX_OnTouchEnd();
+    }
+
+  function _WX_OnTouchMove() {
+        window.WXWASMSDK.WX_OnTouchMove();
+    }
+
+  function _WX_OnTouchStart() {
+        window.WXWASMSDK.WX_OnTouchStart();
+    }
+
+  function _WX_OneWayFunction(functionName, successType, failType, completeType, conf, callbackId) {
+      window.WXWASMSDK.WX_OneWayFunction(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(successType), _WXPointer_stringify_adaptor(failType), _WXPointer_stringify_adaptor(completeType), _WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
+  }
+
+  function _WX_OneWayNoFunction_v(functionName) {
+      window.WXWASMSDK.WX_OneWayNoFunction_v(_WXPointer_stringify_adaptor(functionName));
+  }
+
+  function _WX_OneWayNoFunction_vnns(functionName, param1, param2, param3) {
+      window.WXWASMSDK.WX_OneWayNoFunction_vnns(_WXPointer_stringify_adaptor(functionName), param1, param2, _WXPointer_stringify_adaptor(param3));
+  }
+
+  function _WX_OneWayNoFunction_vs(functionName, param1) {
+      window.WXWASMSDK.WX_OneWayNoFunction_vs(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(param1));
+  }
+
+  function _WX_OneWayNoFunction_vsn(functionName, param1, param2) {
+      window.WXWASMSDK.WX_OneWayNoFunction_vsn(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(param1), param2);
+  }
+
+  function _WX_OneWayNoFunction_vst(functionName, param1, param2) {
+      window.WXWASMSDK.WX_OneWayNoFunction_vst(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(param1), _WXPointer_stringify_adaptor(param2));
+  }
+
+  function _WX_OneWayNoFunction_vt(functionName, param1) {
+      window.WXWASMSDK.WX_OneWayNoFunction_vt(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(param1));
+  }
+
+  function _WX_PrivacyAuthorizeResolve(option) {
+          window.WXWASMSDK.WX_PrivacyAuthorizeResolve(_WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_RecorderPause(id){
+          window.WXWASMSDK.WX_RecorderPause(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_RecorderResume(id){
+          window.WXWASMSDK.WX_RecorderResume(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_RecorderStart(id,option){
+          window.WXWASMSDK.WX_RecorderStart(_WXPointer_stringify_adaptor(id),_WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_RecorderStop(id){
+          window.WXWASMSDK.WX_RecorderStop(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_RegisterOnBLECharacteristicValueChangeCallback(callback) {
+          window.WXWASMSDK.WX_RegisterOnBLECharacteristicValueChangeCallback(callback);
+      }
+
+  function _WX_RegisterOnGyroscopeChangeCallback(callback) {
+          window.WXWASMSDK.WX_RegisterOnGyroscopeChangeCallback(callback);
+      }
+
+  function _WX_RegisterOnTouchCancelCallback(callback) {
+      window.WXWASMSDK.WX_RegisterOnTouchCancelCallback(callback);
+    }
+
+  function _WX_RegisterOnTouchEndCallback(callback) {
+      window.WXWASMSDK.WX_RegisterOnTouchEndCallback(callback);
+    }
+
+  function _WX_RegisterOnTouchMoveCallback(callback) {
+      window.WXWASMSDK.WX_RegisterOnTouchMoveCallback(callback);
+    }
+
+  function _WX_RegisterOnTouchStartCallback(callback) {
+      window.WXWASMSDK.WX_RegisterOnTouchStartCallback(callback);
+    }
+
+  function _WX_RegisterStartGyroscopeCallback(callback) {
+          window.WXWASMSDK.WX_RegisterStartGyroscopeCallback(callback);
+      }
+
+  function _WX_RegisterStopGyroscopeCallback(callback) {
+          window.WXWASMSDK.WX_RegisterStopGyroscopeCallback(callback);
+      }
+
+  function _WX_RegisterTCPSocketOnMessageCallback(callback) {
+          window.WXWASMSDK.WX_RegisterTCPSocketOnMessageCallback(callback);
+      }
+
+  function _WX_RegisterUDPSocketOnMessageCallback(callback) {
+          window.WXWASMSDK.WX_RegisterUDPSocketOnMessageCallback(callback);
+      }
+
+  function _WX_SetDevicePixelRatio(ratio) {
+          window.devicePixelRatio = ratio;
+      }
+
+  function _WX_SetPreferredFramesPerSecond(fps) {
+          window.WXWASMSDK.WX_SetPreferredFramesPerSecond(fps);
+      }
+
+  function _WX_StartGyroscope(callbackId, option) {
+          window.WXWASMSDK.WX_StartGyroscope(_WXPointer_stringify_adaptor(callbackId), _WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_StopGyroscope(callbackId) {
+          window.WXWASMSDK.WX_StopGyroscope(_WXPointer_stringify_adaptor(callbackId));
+      }
+
+  function _WX_SyncFunction_b(functionName){
+      return window.WXWASMSDK.WX_SyncFunction_b(_WXPointer_stringify_adaptor(functionName));
+  }
+
+  function _WX_SyncFunction_bs(functionName, param1){
+      return window.WXWASMSDK.WX_SyncFunction_bs(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(param1));
+  }
+
+  function _WX_SyncFunction_bsnn(functionName, param1, param2, param3){
+      return window.WXWASMSDK.WX_SyncFunction_bsnn(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(param1), param2, param3);
+  }
+
+  function _WX_SyncFunction_bt(functionName, param1){
+      return window.WXWASMSDK.WX_SyncFunction_bt(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(param1));
+  }
+
+  function _WX_SyncFunction_nt(functionName, param1){
+      return window.WXWASMSDK.WX_SyncFunction_nt(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(param1));
+  }
+
+  function _WX_SyncFunction_ss(functionName, param1){
+      var res = window.WXWASMSDK.WX_SyncFunction_ss(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(param1));
+      var bufferSize = lengthBytesUTF8(res || '') + 1;
+      var buffer = _malloc(bufferSize);
+      stringToUTF8((res || ''), buffer, bufferSize);
+      return buffer;
+  }
+
+  function _WX_SyncFunction_t(functionName, returnType){
+      var res = window.WXWASMSDK.WX_SyncFunction_t(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(returnType));
+      var bufferSize = lengthBytesUTF8(res || '') + 1;
+      var buffer = _malloc(bufferSize);
+      stringToUTF8((res || ''), buffer, bufferSize);
+      return buffer; 
+  }
+
+  function _WX_SyncFunction_tnn(functionName, returnType, param1, param2){
+      var res = window.WXWASMSDK.WX_SyncFunction_tnn(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(returnType), param1, param2);
+      var bufferSize = lengthBytesUTF8(res || '') + 1;
+      var buffer = _malloc(bufferSize);
+      stringToUTF8((res || ''), buffer, bufferSize);
+      return buffer;
+  }
+
+  function _WX_SyncFunction_tnnt(functionName, returnType, param1, param2, param3, length){
+      var arr = [];
+      if (param3 && length > 0) {
+          var i32 = param3 >> 2;
+          for (var i = 0; i < length; i++) {
+              arr.push(HEAP32[i32 + i]);
+          }
+      }
+      var res = window.WXWASMSDK.WX_SyncFunction_tnnt(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(returnType), param1, param2, arr);
+      var bufferSize = lengthBytesUTF8(res || '') + 1;
+      var buffer = _malloc(bufferSize);
+      stringToUTF8((res || ''), buffer, bufferSize);
+      return buffer;
+  }
+
+  function _WX_SyncFunction_tt(functionName, returnType, param1){
+      var res = window.WXWASMSDK.WX_SyncFunction_tt(_WXPointer_stringify_adaptor(functionName), _WXPointer_stringify_adaptor(returnType), _WXPointer_stringify_adaptor(param1));
+      var bufferSize = lengthBytesUTF8(res || '') + 1;
+      var buffer = _malloc(bufferSize);
+      stringToUTF8((res || ''), buffer, bufferSize);
+      return buffer;
+  }
+
+  function _WX_TCPSocketBindWifi(id, option) {
+          window.WXWASMSDK.WX_TCPSocketBindWifi(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_TCPSocketClose(id) {
+          window.WXWASMSDK.WX_TCPSocketClose(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketConnect(id, option) {
+          window.WXWASMSDK.WX_TCPSocketConnect(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_TCPSocketOffBindWifi(id) {
+          window.WXWASMSDK.WX_TCPSocketOffBindWifi(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketOffClose(id) {
+          window.WXWASMSDK.WX_TCPSocketOffClose(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketOffConnect(id) {
+          window.WXWASMSDK.WX_TCPSocketOffConnect(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketOffError(id) {
+          window.WXWASMSDK.WX_TCPSocketOffError(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketOffMessage(id) {
+          window.WXWASMSDK.WX_TCPSocketOffMessage(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketOnBindWifi(id) {
+          window.WXWASMSDK.WX_TCPSocketOnBindWifi(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketOnClose(id) {
+          window.WXWASMSDK.WX_TCPSocketOnClose(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketOnConnect(id) {
+          window.WXWASMSDK.WX_TCPSocketOnConnect(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketOnError(id) {
+          window.WXWASMSDK.WX_TCPSocketOnError(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_TCPSocketOnMessage(id, needInfo) {
+          window.WXWASMSDK.WX_TCPSocketOnMessage(_WXPointer_stringify_adaptor(id), needInfo);
+      }
+
+  function _WX_TCPSocketWriteBuffer(id, dataPtr, dataLength) {
+          window.WXWASMSDK.WX_TCPSocketWriteBuffer(_WXPointer_stringify_adaptor(id), dataPtr, dataLength);
+      }
+
+  function _WX_TCPSocketWriteString(id, data) {
+          window.WXWASMSDK.WX_TCPSocketWriteString(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(data));
+      }
+
+  function _WX_UDPSocketBind(id, port) {
+          var res = window.WXWASMSDK.WX_UDPSocketBind(_WXPointer_stringify_adaptor(id), port);
+          return res;
+      }
+
+  function _WX_UDPSocketClose(id) {
+          window.WXWASMSDK.WX_UDPSocketClose(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_UDPSocketConnect(id, option) {
+          window.WXWASMSDK.WX_UDPSocketConnect(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(option));
+      }
+
+  function _WX_UDPSocketOffClose(id) {
+          window.WXWASMSDK.WX_UDPSocketOffClose(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_UDPSocketOffError(id) {
+          window.WXWASMSDK.WX_UDPSocketOffError(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_UDPSocketOffListening(id) {
+          window.WXWASMSDK.WX_UDPSocketOffListening(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_UDPSocketOffMessage(id) {
+          window.WXWASMSDK.WX_UDPSocketOffMessage(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_UDPSocketOnClose(id) {
+          window.WXWASMSDK.WX_UDPSocketOnClose(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_UDPSocketOnError(id) {
+          window.WXWASMSDK.WX_UDPSocketOnError(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_UDPSocketOnListening(id) {
+          window.WXWASMSDK.WX_UDPSocketOnListening(_WXPointer_stringify_adaptor(id));
+      }
+
+  function _WX_UDPSocketOnMessage(id, needInfo) {
+          window.WXWASMSDK.WX_UDPSocketOnMessage(_WXPointer_stringify_adaptor(id), needInfo);
+      }
+
+  function _WX_UDPSocketSendBuffer(id, dataPtr, dataLength, param) {
+          window.WXWASMSDK.WX_UDPSocketSendBuffer(_WXPointer_stringify_adaptor(id), dataPtr, dataLength, _WXPointer_stringify_adaptor(param));
+      }
+
+  function _WX_UDPSocketSendString(id, data, param) {
+          window.WXWASMSDK.WX_UDPSocketSendString(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(data), _WXPointer_stringify_adaptor(param));
+      }
+
+  function _WX_UDPSocketSetTTL(id, ttl) {
+          window.WXWASMSDK.WX_UDPSocketSetTTL(_WXPointer_stringify_adaptor(id), ttl);
+      }
+
+  function _WX_UDPSocketWriteBuffer(id, dataPtr, dataLength, param) {
+          window.WXWASMSDK.WX_UDPSocketWriteBuffer(_WXPointer_stringify_adaptor(id), dataPtr, dataLength, _WXPointer_stringify_adaptor(param));
+      }
+
+  function _WX_UDPSocketWriteString(id, data, param) {
+          window.WXWASMSDK.WX_UDPSocketWriteString(_WXPointer_stringify_adaptor(id), _WXPointer_stringify_adaptor(data), _WXPointer_stringify_adaptor(param));
+      }
+
+  function _WX_UploadFile(conf, callbackId){
+          window.WXWASMSDK.WX_UploadFile(_WXPointer_stringify_adaptor(conf), _WXPointer_stringify_adaptor(callbackId));
+      }
 
   function ___assert_fail(condition, filename, line, func) {
       abort('Assertion failed: ' + UTF8ToString(condition) + ', at: ' + [filename ? UTF8ToString(filename) : 'unknown filename', line, func ? UTF8ToString(func) : 'unknown function']);
@@ -12399,8 +14690,9 @@ var ASM_CONSTS = {
     }
 
   function _glBindTexture(target, texture) {
-      GLctx.bindTexture(target, GL.textures[texture]);
-    }
+          window._lastBoundTexture = texture;
+          GLctx.bindTexture(target, texture ? GL.textures[texture] : null)
+      }
 
   function _glBindVertexArray(vao) {
       GLctx['bindVertexArray'](GL.vaos[vao]);
@@ -12478,16 +14770,153 @@ var ASM_CONSTS = {
     }
 
   function _glCompressedTexImage2D(target, level, internalFormat, width, height, border, imageSize, data) {
-      if (GL.currentContext.version >= 2) { // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
-        if (GLctx.currentPixelUnpackBufferBinding) {
-          GLctx['compressedTexImage2D'](target, level, internalFormat, width, height, border, imageSize, data);
-        } else {
-          GLctx['compressedTexImage2D'](target, level, internalFormat, width, height, border, HEAPU8, data, imageSize);
-        }
-        return;
+  
+          var lastTid = window._lastTextureId;
+          var isMiniProgram = typeof wx !== 'undefined';
+  
+          function getMatchId() {
+              var webgl1c = internalFormat == 36196;
+              if (isMiniProgram && GameGlobal.USED_TEXTURE_COMPRESSION && webgl1c) {
+                  var length = HEAPU8.subarray(data, data + 1)[0];
+                  var d = HEAPU8.subarray(data + 1, data + 1 + length);
+                  var res = [];
+                  d.forEach(function(v) {
+                      res.push(String.fromCharCode(v));
+                  });
+                  var matchId = res.join('');
+                  var start0 = res.length - 8;
+                  var start1 = res.length - 5;
+                  if (res[start0] == '_') {
+                      start0++;
+                      var header = ['a', 's', 't', 'c'];
+                      for (var i = 0; i < header.length; i++) {
+                          if (res[start0 + i] != header[i]) {
+                              return [matchId, '8x8', false];
+                          }
+                      }
+                      start0--;
+                      var astcBlockSize = matchId.substring(start0 + 5);
+                      return [matchId.substr(0, start0), astcBlockSize, false];
+                  } else if (res[start1] == '_') {
+                      start1++;
+                      var size = res[start1++];
+                      if (size != '4' && size != '5' && size != '6' && size != '8') {
+                          return [matchId, '8x8', false];
+                      }
+                      var astcBlockSize = size + 'x' + size;
+                      var limit = res[start1];
+                      var limitType = false;
+                      if (limit != '#') {
+                          limitType = true;
+                      }
+                      start1 -= 2;
+                      return [matchId.substr(0, start1), astcBlockSize, limitType];
+                  } else {
+                      return [matchId, '8x8', false];
+                  }
+              }
+              return [-1, '8x8', false];
+          }
+  
+          var matchIdInfo = getMatchId();
+          var matchId = matchIdInfo[0];
+          var astcBlockSize = matchIdInfo[1];
+          var limitType = matchIdInfo[2];
+  
+          function compressedImage2D(rawData) {
+              var format = 0;
+              var dataOffset = 16;
+              var compressFormat = limitType ? GameGlobal.NoneLimitSupportedTexture : GameGlobal.TextureCompressedFormat;
+              switch (compressFormat) {
+                  case "astc":
+                      var astcList = GLctx.getExtension("WEBGL_compressed_texture_astc");
+                      if (astcBlockSize == '4x4') {
+                          format = astcList.COMPRESSED_RGBA_ASTC_4x4_KHR;
+                          break;
+                      }
+                      if (astcBlockSize == '5x5') {
+                          format = astcList.COMPRESSED_RGBA_ASTC_5x5_KHR;
+                          break;
+                      }
+                      if (astcBlockSize == '6x6') {
+                          format = 0x93B4;
+                          break;
+                      }
+                      format = astcList.COMPRESSED_RGBA_ASTC_8x8_KHR;
+                      break;
+                  case "etc2":
+                      format = GLctx.getExtension("WEBGL_compressed_texture_etc").COMPRESSED_RGBA8_ETC2_EAC;
+                      break;
+                  case "dds":
+                      format = GLctx.getExtension("WEBGL_compressed_texture_s3tc").COMPRESSED_RGBA_S3TC_DXT5_EXT;
+                      dataOffset = 128;
+                      break;
+                  case "pvr":
+                      format = GLctx.getExtension("WEBGL_compressed_texture_pvrtc").COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
+                      var PVR_HEADER_METADATA = 12;
+                      var PVR_HEADER_LENGTH = 13; // The header length in 32 bit ints.
+                      var header = new Int32Array(rawData, 0, PVR_HEADER_LENGTH);
+                      dataOffset = header[PVR_HEADER_METADATA] + 52;
+                      break;
+                  case "etc1":
+                      format = GLctx.getExtension("WEBGL_compressed_texture_etc1").COMPRESSED_RGB_ETC1_WEBGL;
+                      break
+              }
+              GLctx["compressedTexImage2D"](target, level, format, width, height, border, new Uint8Array(rawData, dataOffset))
+          }
+  
+          function texImage2D(image) {
+              GLctx.texImage2D(GLctx.TEXTURE_2D, 0, GLctx.RGBA, GLctx.RGBA, GLctx.UNSIGNED_BYTE, image)
+          }
+  
+          function renderTexture(id) {
+              if (!GL.textures[lastTid]) {
+                  return;
+              }
+              var PotList = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096];
+              var _data = GameGlobal.DownloadedTextures[id].data;
+              var tid = lastTid;
+              if (!GL.textures[tid]) {
+                  return;
+              }
+              GLctx.bindTexture(GLctx.TEXTURE_2D, GL.textures[tid]);
+  
+              if (limitType && !GameGlobal.NoneLimitSupportedTexture) {
+                  texImage2D(_data);
+              } else if (!GameGlobal.TextureCompressedFormat) {
+                  texImage2D(_data);
+              } else if (GameGlobal.TextureCompressedFormat == "pvr" && (width !== height || PotList.indexOf(height) == -1)) {
+                  texImage2D(_data);
+              } else if (GameGlobal.TextureCompressedFormat == 'dds' && (height % 4 !== 0 || width % 4 !== 0)) {
+                  texImage2D(_data);
+              } else {
+                  compressedImage2D(_data);
+              }
+              GLctx.bindTexture(GLctx.TEXTURE_2D, window._lastBoundTexture ? GL.textures[window._lastBoundTexture] : null);
+  
+          }
+  
+          function renderTransparent() {
+              GLctx.texImage2D(GLctx.TEXTURE_2D, 0, GLctx.RGBA, 1, 1, 0, GLctx.RGBA, GLctx.UNSIGNED_SHORT_4_4_4_4, new Uint16Array([0, 0]))
+          }
+  
+          if (matchId != -1) {
+              if (GameGlobal.DownloadedTextures[matchId] && GameGlobal.DownloadedTextures[matchId].data) {
+                  renderTexture(matchId)
+              } else {
+                  renderTransparent();
+                  window.WXWASMSDK.WXDownloadTexture(matchId, width, height, (function() {
+                      renderTexture(matchId)
+                  }), limitType)
+              }
+              return
+          }
+          if (GL.currentContext.supportsWebGL2EntryPoints) {
+              GLctx["compressedTexImage2D"](target, level, internalFormat, width, height, border, HEAPU8, data, imageSize);
+              return
+          }
+          GLctx["compressedTexImage2D"](target, level, internalFormat, width, height, border, data ? HEAPU8.subarray(data, data + imageSize) : null)
       }
-      GLctx['compressedTexImage2D'](target, level, internalFormat, width, height, border, data ? HEAPU8.subarray((data), (data+imageSize)) : null);
-    }
 
   function _glCompressedTexImage3D(target, level, internalFormat, width, height, depth, border, imageSize, data) {
       if (GLctx.currentPixelUnpackBufferBinding) {
@@ -12498,16 +14927,177 @@ var ASM_CONSTS = {
     }
 
   function _glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data) {
-      if (GL.currentContext.version >= 2) { // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
-        if (GLctx.currentPixelUnpackBufferBinding) {
-          GLctx['compressedTexSubImage2D'](target, level, xoffset, yoffset, width, height, format, imageSize, data);
-        } else {
-          GLctx['compressedTexSubImage2D'](target, level, xoffset, yoffset, width, height, format, HEAPU8, data, imageSize);
-        }
-        return;
+          var lastTid = window._lastTextureId;
+          var isMiniProgram = typeof wx !== 'undefined';
+  
+          function getMatchId() {
+              var webgl1c = format == 36196;
+              if (isMiniProgram && GameGlobal.USED_TEXTURE_COMPRESSION && webgl1c) {
+                  var length = HEAPU8.subarray(data, data + 1)[0];
+                  var d = HEAPU8.subarray(data + 1, data + 1 + length);
+                  var res = [];
+                  d.forEach(function(v) {
+                      res.push(String.fromCharCode(v));
+                  });
+                  var matchId = res.join('');
+                  var start0 = res.length - 8;
+                  var start1 = res.length - 5;
+                  if (res[start0] == '_') {
+                      start0++;
+                      var header = ['a', 's', 't', 'c'];
+                      for (var i = 0; i < header.length; i++) {
+                          if (res[start0 + i] != header[i]) {
+                              return [matchId, '8x8', false];
+                          }
+                      }
+                      start0--;
+                      var astcBlockSize = matchId.substring(start0 + 5);
+                      return [matchId.substr(0, start0), astcBlockSize, false];
+                  } else if (res[start1] == '_') {
+                      start1++;
+                      var size = res[start1++];
+                      if (size != '4' && size != '5' && size != '6' && size != '8') {
+                          return [matchId, '8x8', false];
+                      }
+                      var astcBlockSize = size + 'x' + size;
+                      var limit = res[start1];
+                      var limitType = false;
+                      if (limit != '#') {
+                          limitType = true;
+                      }
+                      start1 -= 2;
+                      return [matchId.substr(0, start1), astcBlockSize, limitType];
+                  } else {
+                      return [matchId, '8x8', false];
+                  }
+              }
+              return [-1, '8x8', false];
+          }
+  
+          var matchIdInfo = getMatchId();
+          var matchId = matchIdInfo[0];
+          var astcBlockSize = matchIdInfo[1];
+          var limitType = matchIdInfo[2];
+  
+          function compressedImage2D(rawData) {
+              var format = 0;
+              var dataOffset = 16;
+              var compressFormat = limitType ? GameGlobal.NoneLimitSupportedTexture : GameGlobal.TextureCompressedFormat;
+              switch (compressFormat) {
+                  case "astc":
+                      var astcList = GLctx.getExtension("WEBGL_compressed_texture_astc");
+                      if (astcBlockSize == '4x4') {
+                          format = astcList.COMPRESSED_RGBA_ASTC_4x4_KHR;
+                          break;
+                      }
+                      if (astcBlockSize == '5x5') {
+                          format = astcList.COMPRESSED_RGBA_ASTC_5x5_KHR;
+                          break;
+                      }
+                      if (astcBlockSize == '6x6') {
+                          format = 0x93B4;
+                          break;
+                      }
+                      format = astcList.COMPRESSED_RGBA_ASTC_8x8_KHR;
+                      break;
+                  case "etc2":
+                      format = GLctx.getExtension("WEBGL_compressed_texture_etc").COMPRESSED_RGBA8_ETC2_EAC;
+                      break;
+                  case "dds":
+                      format = GLctx.getExtension("WEBGL_compressed_texture_s3tc").COMPRESSED_RGBA_S3TC_DXT5_EXT;
+                      dataOffset = 128;
+                      break;
+                  case "pvr":
+                      format = GLctx.getExtension("WEBGL_compressed_texture_pvrtc").COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
+                      var PVR_HEADER_METADATA = 12;
+                      var PVR_HEADER_LENGTH = 13; // The header length in 32 bit ints.
+                      var header = new Int32Array(rawData, 0, PVR_HEADER_LENGTH);
+                      dataOffset = header[PVR_HEADER_METADATA] + 52;
+                      break;
+                  case "etc1":
+                      format = GLctx.getExtension("WEBGL_compressed_texture_etc1").COMPRESSED_RGB_ETC1_WEBGL;
+                      break
+              }
+              GLctx["compressedTexSubImage2D"](target, level, xoffset, yoffset, width, height, format, new Uint8Array(rawData, dataOffset))
+          }
+  
+          function texImage2D(image) {
+              GLctx.texSubImage2D(target, level, xoffset, yoffset, width, height, GLctx.RGBA, GLctx.UNSIGNED_BYTE, image)
+          }
+  
+          function renderTexture(id) {
+              if (!GL.textures[lastTid]) {
+                  return;
+              }
+              var _data = GameGlobal.DownloadedTextures[id].data;
+              var tid = lastTid;
+              if (!GL.textures[tid]) {
+                  return;
+              }
+              GLctx.bindTexture(GLctx.TEXTURE_2D, GL.textures[tid]);
+  
+              if (limitType && !GameGlobal.NoneLimitSupportedTexture) {
+                  texImage2D(_data);
+              } else if (!GameGlobal.TextureCompressedFormat) {
+                  texImage2D(_data);
+              } else if (GameGlobal.TextureCompressedFormat == "pvr" && (width !== height || PotList.indexOf(height) == -1)) {
+                  texImage2D(_data);
+              } else if (GameGlobal.TextureCompressedFormat == 'dds' && (height % 4 !== 0 || width % 4 !== 0)) {
+                  texImage2D(_data);
+              } else {
+                  compressedImage2D(_data);
+              }
+  
+              GLctx.bindTexture(GLctx.TEXTURE_2D, window._lastBoundTexture ? GL.textures[window._lastBoundTexture] : null);
+  
+          }
+  
+          var p = window._lastTexStorage2DParams;
+          if (matchId != -1) {
+              var f = GLctx.RGBA8;
+              switch (GameGlobal.TextureCompressedFormat) {
+                  case "astc":
+                      var astcList = GLctx.getExtension("WEBGL_compressed_texture_astc");
+                      if (astcBlockSize == '4x4') {
+                          f = astcList.COMPRESSED_RGBA_ASTC_4x4_KHR;
+                          break;
+                      }
+                      if (astcBlockSize == '5x5') {
+                          f = astcList.COMPRESSED_RGBA_ASTC_5x5_KHR;
+                          break;
+                      }
+                      if (astcBlockSize == '6x6') {
+                          f = 0x93B4;
+                          break;
+                      }
+                      f = astcList.COMPRESSED_RGBA_ASTC_8x8_KHR;
+                      break;
+                  case "etc2":
+                      f = GLctx.getExtension("WEBGL_compressed_texture_etc").COMPRESSED_RGBA8_ETC2_EAC;
+                      break;
+                  case "dds":
+                      f = GLctx.getExtension("WEBGL_compressed_texture_s3tc").COMPRESSED_RGBA_S3TC_DXT5_EXT;
+                      break;
+                  case "pvr":
+                      f = GLctx.getExtension("WEBGL_compressed_texture_pvrtc").COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
+                      break;
+              }
+              GLctx["texStorage2D"](p[0], p[1], f, width, height);
+              if (GameGlobal.DownloadedTextures[matchId] && GameGlobal.DownloadedTextures[matchId].data) {
+                  renderTexture(matchId)
+              } else {
+                  window.WXWASMSDK.WXDownloadTexture(matchId, width, height, (function() {
+                      renderTexture(matchId)
+                  }), limitType)
+              }
+              return
+          }
+          if (GL.currentContext.supportsWebGL2EntryPoints) {
+              GLctx["compressedTexSubImage2D"](target, level, xoffset, yoffset, width, height, format, HEAPU8, data, imageSize);
+              return
+          }
+          GLctx["compressedTexSubImage2D"](target, level, xoffset, yoffset, width, height, format, data ? HEAPU8.subarray(data, data + imageSize) : null)
       }
-      GLctx['compressedTexSubImage2D'](target, level, xoffset, yoffset, width, height, format, data ? HEAPU8.subarray((data), (data+imageSize)) : null);
-    }
 
   function _glCompressedTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data) {
       if (GLctx.currentPixelUnpackBufferBinding) {
@@ -12881,9 +15471,20 @@ var ASM_CONSTS = {
     }
 
   function _glGenTextures(n, textures) {
-      __glGenObject(n, textures, 'createTexture', GL.textures
-        );
-    }
+          for (var i = 0; i < n; i++) {
+              var texture = GLctx.createTexture();
+              if (!texture) {
+                  GL.recordError(1282);
+                  while (i < n) HEAP32[textures + i++ * 4 >> 2] = 0;
+                  return
+              }
+              var id = GL.getNewId(GL.textures);
+              texture.name = id;
+              GL.textures[id] = texture;
+              window._lastTextureId = id;
+              HEAP32[textures + i * 4 >> 2] = id
+          }
+      }
 
   function _glGenVertexArrays(n, arrays) {
       __glGenObject(n, arrays, 'createVertexArray', GL.vaos
@@ -15215,7 +17816,13 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('fetchSettings');
 }
 var asmLibraryArg = {
+  "CheckWXFSReady": _CheckWXFSReady,
+  "DumpProfileStatsCallback": _DumpProfileStatsCallback,
   "GetJSMemoryInfo": _GetJSMemoryInfo,
+  "GetObsoleteFilePath": _GetObsoleteFilePath,
+  "JSManageCpuProfile": _JSManageCpuProfile,
+  "JSReportUnityProfileData": _JSReportUnityProfileData,
+  "JSStartGameDataMonitor": _JSStartGameDataMonitor,
   "JS_Accelerometer_IsRunning": _JS_Accelerometer_IsRunning,
   "JS_Accelerometer_Start": _JS_Accelerometer_Start,
   "JS_Accelerometer_Stop": _JS_Accelerometer_Stop,
@@ -15301,6 +17908,341 @@ var asmLibraryArg = {
   "JS_WebRequest_SetRedirectLimit": _JS_WebRequest_SetRedirectLimit,
   "JS_WebRequest_SetRequestHeader": _JS_WebRequest_SetRequestHeader,
   "JS_WebRequest_SetTimeout": _JS_WebRequest_SetTimeout,
+  "SetUnityUIType": _SetUnityUIType,
+  "UnCleanbyPath": _UnCleanbyPath,
+  "UnloadbyPath": _UnloadbyPath,
+  "WE_GetDebugEntriesVisible": _WE_GetDebugEntriesVisible,
+  "WE_GetSafeArea": _WE_GetSafeArea,
+  "WE_SetDebugEntriesVisible": _WE_SetDebugEntriesVisible,
+  "WXADDestroy": _WXADDestroy,
+  "WXADGetStyleValue": _WXADGetStyleValue,
+  "WXADLoad": _WXADLoad,
+  "WXADStyleChange": _WXADStyleChange,
+  "WXAccessFile": _WXAccessFile,
+  "WXAccessFileSync": _WXAccessFileSync,
+  "WXAppendFile": _WXAppendFile,
+  "WXAppendStringFile": _WXAppendStringFile,
+  "WXCameraCloseFrameChange": _WXCameraCloseFrameChange,
+  "WXCameraCreateCamera": _WXCameraCreateCamera,
+  "WXCameraDestroy": _WXCameraDestroy,
+  "WXCameraListenFrameChange": _WXCameraListenFrameChange,
+  "WXCameraOnAuthCancel": _WXCameraOnAuthCancel,
+  "WXCameraOnCameraFrame": _WXCameraOnCameraFrame,
+  "WXCameraOnStop": _WXCameraOnStop,
+  "WXCanIUse": _WXCanIUse,
+  "WXChatClose": _WXChatClose,
+  "WXChatCreate": _WXChatCreate,
+  "WXChatHide": _WXChatHide,
+  "WXChatOff": _WXChatOff,
+  "WXChatOn": _WXChatOn,
+  "WXChatOpen": _WXChatOpen,
+  "WXChatSetSignature": _WXChatSetSignature,
+  "WXChatSetTabs": _WXChatSetTabs,
+  "WXChatShow": _WXChatShow,
+  "WXCleanAllFileCache": _WXCleanAllFileCache,
+  "WXCleanFileCache": _WXCleanFileCache,
+  "WXCopyFile": _WXCopyFile,
+  "WXCopyFileSync": _WXCopyFileSync,
+  "WXCreateBannerAd": _WXCreateBannerAd,
+  "WXCreateCustomAd": _WXCreateCustomAd,
+  "WXCreateFixedBottomMiddleBannerAd": _WXCreateFixedBottomMiddleBannerAd,
+  "WXCreateGameClubButton": _WXCreateGameClubButton,
+  "WXCreateInnerAudioContext": _WXCreateInnerAudioContext,
+  "WXCreateInterstitialAd": _WXCreateInterstitialAd,
+  "WXCreateRewardedVideoAd": _WXCreateRewardedVideoAd,
+  "WXCreateUserInfoButton": _WXCreateUserInfoButton,
+  "WXCreateVideo": _WXCreateVideo,
+  "WXDataContextPostMessage": _WXDataContextPostMessage,
+  "WXFSInit": _WXFSInit,
+  "WXGameClubButtonAddListener": _WXGameClubButtonAddListener,
+  "WXGameClubButtonDestroy": _WXGameClubButtonDestroy,
+  "WXGameClubButtonHide": _WXGameClubButtonHide,
+  "WXGameClubButtonRemoveListener": _WXGameClubButtonRemoveListener,
+  "WXGameClubButtonSetProperty": _WXGameClubButtonSetProperty,
+  "WXGameClubButtonShow": _WXGameClubButtonShow,
+  "WXGameClubStyleChangeInt": _WXGameClubStyleChangeInt,
+  "WXGameClubStyleChangeStr": _WXGameClubStyleChangeStr,
+  "WXGetBundleFromXML": _WXGetBundleFromXML,
+  "WXGetBundleNumberInMemory": _WXGetBundleNumberInMemory,
+  "WXGetBundleNumberOnDisk": _WXGetBundleNumberOnDisk,
+  "WXGetBundleSizeInMemory": _WXGetBundleSizeInMemory,
+  "WXGetBundleSizeOnDisk": _WXGetBundleSizeOnDisk,
+  "WXGetCachePath": _WXGetCachePath,
+  "WXGetDynamicMemorySize": _WXGetDynamicMemorySize,
+  "WXGetEXFrameTime": _WXGetEXFrameTime,
+  "WXGetFontRawData": _WXGetFontRawData,
+  "WXGetOpenDataContext": _WXGetOpenDataContext,
+  "WXGetPluginCachePath": _WXGetPluginCachePath,
+  "WXGetStaticMemorySize": _WXGetStaticMemorySize,
+  "WXGetTotalMemorySize": _WXGetTotalMemorySize,
+  "WXGetTotalStackSize": _WXGetTotalStackSize,
+  "WXGetUnAllocatedMemorySize": _WXGetUnAllocatedMemorySize,
+  "WXGetUsedMemorySize": _WXGetUsedMemorySize,
+  "WXGetUserDataPath": _WXGetUserDataPath,
+  "WXHideAd": _WXHideAd,
+  "WXHideLoadingPage": _WXHideLoadingPage,
+  "WXHideOpenData": _WXHideOpenData,
+  "WXInitializeSDK": _WXInitializeSDK,
+  "WXInnerAudioContextAddListener": _WXInnerAudioContextAddListener,
+  "WXInnerAudioContextDestroy": _WXInnerAudioContextDestroy,
+  "WXInnerAudioContextGetBool": _WXInnerAudioContextGetBool,
+  "WXInnerAudioContextGetFloat": _WXInnerAudioContextGetFloat,
+  "WXInnerAudioContextPause": _WXInnerAudioContextPause,
+  "WXInnerAudioContextPlay": _WXInnerAudioContextPlay,
+  "WXInnerAudioContextRemoveListener": _WXInnerAudioContextRemoveListener,
+  "WXInnerAudioContextSeek": _WXInnerAudioContextSeek,
+  "WXInnerAudioContextSetBool": _WXInnerAudioContextSetBool,
+  "WXInnerAudioContextSetFloat": _WXInnerAudioContextSetFloat,
+  "WXInnerAudioContextSetString": _WXInnerAudioContextSetString,
+  "WXInnerAudioContextStop": _WXInnerAudioContextStop,
+  "WXIsCloudTest": _WXIsCloudTest,
+  "WXLaunchOperaBridge": _WXLaunchOperaBridge,
+  "WXLogManagerDebug": _WXLogManagerDebug,
+  "WXLogManagerInfo": _WXLogManagerInfo,
+  "WXLogManagerLog": _WXLogManagerLog,
+  "WXLogManagerWarn": _WXLogManagerWarn,
+  "WXMkdir": _WXMkdir,
+  "WXMkdirSync": _WXMkdirSync,
+  "WXOnLaunchProgress": _WXOnLaunchProgress,
+  "WXOnShareAppMessage": _WXOnShareAppMessage,
+  "WXOnShareAppMessageResolve": _WXOnShareAppMessageResolve,
+  "WXOpenDataToTempFilePath": _WXOpenDataToTempFilePath,
+  "WXOpenDataToTempFilePathSync": _WXOpenDataToTempFilePathSync,
+  "WXPointer_stringify_adaptor": _WXPointer_stringify_adaptor,
+  "WXPreDownloadAudios": _WXPreDownloadAudios,
+  "WXPreloadConcurrent": _WXPreloadConcurrent,
+  "WXProfilingMemoryDump": _WXProfilingMemoryDump,
+  "WXReadFile": _WXReadFile,
+  "WXReadFileSync": _WXReadFileSync,
+  "WXRemoveFile": _WXRemoveFile,
+  "WXReportGameSceneError": _WXReportGameSceneError,
+  "WXReportGameStart": _WXReportGameStart,
+  "WXReportUserBehaviorBranchAnalytics": _WXReportUserBehaviorBranchAnalytics,
+  "WXRewardedVideoAdReportShareBehavior": _WXRewardedVideoAdReportShareBehavior,
+  "WXRmdir": _WXRmdir,
+  "WXRmdirSync": _WXRmdirSync,
+  "WXSetArrayBuffer": _WXSetArrayBuffer,
+  "WXSetDataCDN": _WXSetDataCDN,
+  "WXSetPreloadList": _WXSetPreloadList,
+  "WXSetSyncReadCacheEnabled": _WXSetSyncReadCacheEnabled,
+  "WXShareFontBuffer": _WXShareFontBuffer,
+  "WXShowAd": _WXShowAd,
+  "WXShowAd2": _WXShowAd2,
+  "WXShowOpenData": _WXShowOpenData,
+  "WXStat": _WXStat,
+  "WXStorageDeleteAllSync": _WXStorageDeleteAllSync,
+  "WXStorageDeleteKeySync": _WXStorageDeleteKeySync,
+  "WXStorageGetFloatSync": _WXStorageGetFloatSync,
+  "WXStorageGetIntSync": _WXStorageGetIntSync,
+  "WXStorageGetStringSync": _WXStorageGetStringSync,
+  "WXStorageHasKeySync": _WXStorageHasKeySync,
+  "WXStorageSetFloatSync": _WXStorageSetFloatSync,
+  "WXStorageSetIntSync": _WXStorageSetIntSync,
+  "WXStorageSetStringSync": _WXStorageSetStringSync,
+  "WXToTempFilePath": _WXToTempFilePath,
+  "WXToTempFilePathSync": _WXToTempFilePathSync,
+  "WXUncaughtException": _WXUncaughtException,
+  "WXUnlink": _WXUnlink,
+  "WXUnlinkSync": _WXUnlinkSync,
+  "WXUploadTaskAbort": _WXUploadTaskAbort,
+  "WXUploadTaskOffHeadersReceived": _WXUploadTaskOffHeadersReceived,
+  "WXUploadTaskOffProgressUpdate": _WXUploadTaskOffProgressUpdate,
+  "WXUploadTaskOnHeadersReceived": _WXUploadTaskOnHeadersReceived,
+  "WXUploadTaskOnProgressUpdate": _WXUploadTaskOnProgressUpdate,
+  "WXUserInfoButtonDestroy": _WXUserInfoButtonDestroy,
+  "WXUserInfoButtonHide": _WXUserInfoButtonHide,
+  "WXUserInfoButtonOffTap": _WXUserInfoButtonOffTap,
+  "WXUserInfoButtonOnTap": _WXUserInfoButtonOnTap,
+  "WXUserInfoButtonShow": _WXUserInfoButtonShow,
+  "WXVideoAddListener": _WXVideoAddListener,
+  "WXVideoDestroy": _WXVideoDestroy,
+  "WXVideoExitFullScreen": _WXVideoExitFullScreen,
+  "WXVideoPause": _WXVideoPause,
+  "WXVideoPlay": _WXVideoPlay,
+  "WXVideoRemoveListener": _WXVideoRemoveListener,
+  "WXVideoRequestFullScreen": _WXVideoRequestFullScreen,
+  "WXVideoSeek": _WXVideoSeek,
+  "WXVideoSetProperty": _WXVideoSetProperty,
+  "WXVideoStop": _WXVideoStop,
+  "WXWriteBinFileSync": _WXWriteBinFileSync,
+  "WXWriteFile": _WXWriteFile,
+  "WXWriteFileSync": _WXWriteFileSync,
+  "WXWriteLog": _WXWriteLog,
+  "WXWriteStringFile": _WXWriteStringFile,
+  "WXWriteWarn": _WXWriteWarn,
+  "WX_CallJSFunction": _WX_CallJSFunction,
+  "WX_CallJSFunctionWithReturn": _WX_CallJSFunctionWithReturn,
+  "WX_ClassConstructor": _WX_ClassConstructor,
+  "WX_ClassFunction": _WX_ClassFunction,
+  "WX_ClassOffEventFunction": _WX_ClassOffEventFunction,
+  "WX_ClassOnEventFunction": _WX_ClassOnEventFunction,
+  "WX_ClassOneWayFunction": _WX_ClassOneWayFunction,
+  "WX_ClassOneWayNoFunction_t": _WX_ClassOneWayNoFunction_t,
+  "WX_ClassOneWayNoFunction_v": _WX_ClassOneWayNoFunction_v,
+  "WX_ClassOneWayNoFunction_vn": _WX_ClassOneWayNoFunction_vn,
+  "WX_ClassOneWayNoFunction_vs": _WX_ClassOneWayNoFunction_vs,
+  "WX_ClassOneWayNoFunction_vt": _WX_ClassOneWayNoFunction_vt,
+  "WX_ClassSetProperty": _WX_ClassSetProperty,
+  "WX_CloudCDNBuffer": _WX_CloudCDNBuffer,
+  "WX_CloudCDNString": _WX_CloudCDNString,
+  "WX_CloudCallContainer": _WX_CloudCallContainer,
+  "WX_CloudCallFunction": _WX_CloudCallFunction,
+  "WX_CloudCloud": _WX_CloudCloud,
+  "WX_CloudCloudID": _WX_CloudCloudID,
+  "WX_CloudDeleteFile": _WX_CloudDeleteFile,
+  "WX_CloudDownloadFile": _WX_CloudDownloadFile,
+  "WX_CloudGetTempFileURL": _WX_CloudGetTempFileURL,
+  "WX_CloudInit": _WX_CloudInit,
+  "WX_CloudUploadFile": _WX_CloudUploadFile,
+  "WX_CreateTCPSocket": _WX_CreateTCPSocket,
+  "WX_CreateUDPSocket": _WX_CreateUDPSocket,
+  "WX_FileSystemManagerAppendFileStringSync": _WX_FileSystemManagerAppendFileStringSync,
+  "WX_FileSystemManagerAppendFileSync": _WX_FileSystemManagerAppendFileSync,
+  "WX_FileSystemManagerClose": _WX_FileSystemManagerClose,
+  "WX_FileSystemManagerCloseSync": _WX_FileSystemManagerCloseSync,
+  "WX_FileSystemManagerFstat": _WX_FileSystemManagerFstat,
+  "WX_FileSystemManagerFstatSync": _WX_FileSystemManagerFstatSync,
+  "WX_FileSystemManagerFtruncate": _WX_FileSystemManagerFtruncate,
+  "WX_FileSystemManagerFtruncateSync": _WX_FileSystemManagerFtruncateSync,
+  "WX_FileSystemManagerGetFileInfo": _WX_FileSystemManagerGetFileInfo,
+  "WX_FileSystemManagerGetSavedFileList": _WX_FileSystemManagerGetSavedFileList,
+  "WX_FileSystemManagerOpen": _WX_FileSystemManagerOpen,
+  "WX_FileSystemManagerOpenSync": _WX_FileSystemManagerOpenSync,
+  "WX_FileSystemManagerRead": _WX_FileSystemManagerRead,
+  "WX_FileSystemManagerReadCompressedFileSync": _WX_FileSystemManagerReadCompressedFileSync,
+  "WX_FileSystemManagerReadSync": _WX_FileSystemManagerReadSync,
+  "WX_FileSystemManagerReadZipEntry": _WX_FileSystemManagerReadZipEntry,
+  "WX_FileSystemManagerReadZipEntryString": _WX_FileSystemManagerReadZipEntryString,
+  "WX_FileSystemManagerReaddir": _WX_FileSystemManagerReaddir,
+  "WX_FileSystemManagerReaddirSync": _WX_FileSystemManagerReaddirSync,
+  "WX_FileSystemManagerRemoveSavedFile": _WX_FileSystemManagerRemoveSavedFile,
+  "WX_FileSystemManagerRename": _WX_FileSystemManagerRename,
+  "WX_FileSystemManagerRenameSync": _WX_FileSystemManagerRenameSync,
+  "WX_FileSystemManagerSaveFile": _WX_FileSystemManagerSaveFile,
+  "WX_FileSystemManagerSaveFileSync": _WX_FileSystemManagerSaveFileSync,
+  "WX_FileSystemManagerStatSync": _WX_FileSystemManagerStatSync,
+  "WX_FileSystemManagerTruncate": _WX_FileSystemManagerTruncate,
+  "WX_FileSystemManagerTruncateSync": _WX_FileSystemManagerTruncateSync,
+  "WX_FileSystemManagerUnzip": _WX_FileSystemManagerUnzip,
+  "WX_FileSystemManagerWrite": _WX_FileSystemManagerWrite,
+  "WX_FileSystemManagerWriteString": _WX_FileSystemManagerWriteString,
+  "WX_FileSystemManagerWriteStringSync": _WX_FileSystemManagerWriteStringSync,
+  "WX_FileSystemManagerWriteSync": _WX_FileSystemManagerWriteSync,
+  "WX_GameRecorderAbort": _WX_GameRecorderAbort,
+  "WX_GameRecorderOff": _WX_GameRecorderOff,
+  "WX_GameRecorderOn": _WX_GameRecorderOn,
+  "WX_GameRecorderPause": _WX_GameRecorderPause,
+  "WX_GameRecorderResume": _WX_GameRecorderResume,
+  "WX_GameRecorderStart": _WX_GameRecorderStart,
+  "WX_GameRecorderStop": _WX_GameRecorderStop,
+  "WX_GetGameRecorder": _WX_GetGameRecorder,
+  "WX_GetRecorderManager": _WX_GetRecorderManager,
+  "WX_OffAddToFavorites": _WX_OffAddToFavorites,
+  "WX_OffBLECharacteristicValueChange": _WX_OffBLECharacteristicValueChange,
+  "WX_OffCopyUrl": _WX_OffCopyUrl,
+  "WX_OffEventRegister": _WX_OffEventRegister,
+  "WX_OffGameLiveStateChange": _WX_OffGameLiveStateChange,
+  "WX_OffGyroscopeChange": _WX_OffGyroscopeChange,
+  "WX_OffHandoff": _WX_OffHandoff,
+  "WX_OffShareTimeline": _WX_OffShareTimeline,
+  "WX_OffTouchCancel": _WX_OffTouchCancel,
+  "WX_OffTouchEnd": _WX_OffTouchEnd,
+  "WX_OffTouchMove": _WX_OffTouchMove,
+  "WX_OffTouchStart": _WX_OffTouchStart,
+  "WX_OnAddToFavorites": _WX_OnAddToFavorites,
+  "WX_OnAddToFavorites_Resolve": _WX_OnAddToFavorites_Resolve,
+  "WX_OnBLECharacteristicValueChange": _WX_OnBLECharacteristicValueChange,
+  "WX_OnCopyUrl": _WX_OnCopyUrl,
+  "WX_OnCopyUrl_Resolve": _WX_OnCopyUrl_Resolve,
+  "WX_OnEventRegister": _WX_OnEventRegister,
+  "WX_OnGameLiveStateChange": _WX_OnGameLiveStateChange,
+  "WX_OnGameLiveStateChange_Resolve": _WX_OnGameLiveStateChange_Resolve,
+  "WX_OnGyroscopeChange": _WX_OnGyroscopeChange,
+  "WX_OnHandoff": _WX_OnHandoff,
+  "WX_OnHandoff_Resolve": _WX_OnHandoff_Resolve,
+  "WX_OnNeedPrivacyAuthorization": _WX_OnNeedPrivacyAuthorization,
+  "WX_OnRecorderError": _WX_OnRecorderError,
+  "WX_OnRecorderFrameRecorded": _WX_OnRecorderFrameRecorded,
+  "WX_OnRecorderInterruptionBegin": _WX_OnRecorderInterruptionBegin,
+  "WX_OnRecorderInterruptionEnd": _WX_OnRecorderInterruptionEnd,
+  "WX_OnRecorderPause": _WX_OnRecorderPause,
+  "WX_OnRecorderResume": _WX_OnRecorderResume,
+  "WX_OnRecorderStart": _WX_OnRecorderStart,
+  "WX_OnRecorderStop": _WX_OnRecorderStop,
+  "WX_OnShareTimeline": _WX_OnShareTimeline,
+  "WX_OnShareTimeline_Resolve": _WX_OnShareTimeline_Resolve,
+  "WX_OnTouchCancel": _WX_OnTouchCancel,
+  "WX_OnTouchEnd": _WX_OnTouchEnd,
+  "WX_OnTouchMove": _WX_OnTouchMove,
+  "WX_OnTouchStart": _WX_OnTouchStart,
+  "WX_OneWayFunction": _WX_OneWayFunction,
+  "WX_OneWayNoFunction_v": _WX_OneWayNoFunction_v,
+  "WX_OneWayNoFunction_vnns": _WX_OneWayNoFunction_vnns,
+  "WX_OneWayNoFunction_vs": _WX_OneWayNoFunction_vs,
+  "WX_OneWayNoFunction_vsn": _WX_OneWayNoFunction_vsn,
+  "WX_OneWayNoFunction_vst": _WX_OneWayNoFunction_vst,
+  "WX_OneWayNoFunction_vt": _WX_OneWayNoFunction_vt,
+  "WX_PrivacyAuthorizeResolve": _WX_PrivacyAuthorizeResolve,
+  "WX_RecorderPause": _WX_RecorderPause,
+  "WX_RecorderResume": _WX_RecorderResume,
+  "WX_RecorderStart": _WX_RecorderStart,
+  "WX_RecorderStop": _WX_RecorderStop,
+  "WX_RegisterOnBLECharacteristicValueChangeCallback": _WX_RegisterOnBLECharacteristicValueChangeCallback,
+  "WX_RegisterOnGyroscopeChangeCallback": _WX_RegisterOnGyroscopeChangeCallback,
+  "WX_RegisterOnTouchCancelCallback": _WX_RegisterOnTouchCancelCallback,
+  "WX_RegisterOnTouchEndCallback": _WX_RegisterOnTouchEndCallback,
+  "WX_RegisterOnTouchMoveCallback": _WX_RegisterOnTouchMoveCallback,
+  "WX_RegisterOnTouchStartCallback": _WX_RegisterOnTouchStartCallback,
+  "WX_RegisterStartGyroscopeCallback": _WX_RegisterStartGyroscopeCallback,
+  "WX_RegisterStopGyroscopeCallback": _WX_RegisterStopGyroscopeCallback,
+  "WX_RegisterTCPSocketOnMessageCallback": _WX_RegisterTCPSocketOnMessageCallback,
+  "WX_RegisterUDPSocketOnMessageCallback": _WX_RegisterUDPSocketOnMessageCallback,
+  "WX_SetDevicePixelRatio": _WX_SetDevicePixelRatio,
+  "WX_SetPreferredFramesPerSecond": _WX_SetPreferredFramesPerSecond,
+  "WX_StartGyroscope": _WX_StartGyroscope,
+  "WX_StopGyroscope": _WX_StopGyroscope,
+  "WX_SyncFunction_b": _WX_SyncFunction_b,
+  "WX_SyncFunction_bs": _WX_SyncFunction_bs,
+  "WX_SyncFunction_bsnn": _WX_SyncFunction_bsnn,
+  "WX_SyncFunction_bt": _WX_SyncFunction_bt,
+  "WX_SyncFunction_nt": _WX_SyncFunction_nt,
+  "WX_SyncFunction_ss": _WX_SyncFunction_ss,
+  "WX_SyncFunction_t": _WX_SyncFunction_t,
+  "WX_SyncFunction_tnn": _WX_SyncFunction_tnn,
+  "WX_SyncFunction_tnnt": _WX_SyncFunction_tnnt,
+  "WX_SyncFunction_tt": _WX_SyncFunction_tt,
+  "WX_TCPSocketBindWifi": _WX_TCPSocketBindWifi,
+  "WX_TCPSocketClose": _WX_TCPSocketClose,
+  "WX_TCPSocketConnect": _WX_TCPSocketConnect,
+  "WX_TCPSocketOffBindWifi": _WX_TCPSocketOffBindWifi,
+  "WX_TCPSocketOffClose": _WX_TCPSocketOffClose,
+  "WX_TCPSocketOffConnect": _WX_TCPSocketOffConnect,
+  "WX_TCPSocketOffError": _WX_TCPSocketOffError,
+  "WX_TCPSocketOffMessage": _WX_TCPSocketOffMessage,
+  "WX_TCPSocketOnBindWifi": _WX_TCPSocketOnBindWifi,
+  "WX_TCPSocketOnClose": _WX_TCPSocketOnClose,
+  "WX_TCPSocketOnConnect": _WX_TCPSocketOnConnect,
+  "WX_TCPSocketOnError": _WX_TCPSocketOnError,
+  "WX_TCPSocketOnMessage": _WX_TCPSocketOnMessage,
+  "WX_TCPSocketWriteBuffer": _WX_TCPSocketWriteBuffer,
+  "WX_TCPSocketWriteString": _WX_TCPSocketWriteString,
+  "WX_UDPSocketBind": _WX_UDPSocketBind,
+  "WX_UDPSocketClose": _WX_UDPSocketClose,
+  "WX_UDPSocketConnect": _WX_UDPSocketConnect,
+  "WX_UDPSocketOffClose": _WX_UDPSocketOffClose,
+  "WX_UDPSocketOffError": _WX_UDPSocketOffError,
+  "WX_UDPSocketOffListening": _WX_UDPSocketOffListening,
+  "WX_UDPSocketOffMessage": _WX_UDPSocketOffMessage,
+  "WX_UDPSocketOnClose": _WX_UDPSocketOnClose,
+  "WX_UDPSocketOnError": _WX_UDPSocketOnError,
+  "WX_UDPSocketOnListening": _WX_UDPSocketOnListening,
+  "WX_UDPSocketOnMessage": _WX_UDPSocketOnMessage,
+  "WX_UDPSocketSendBuffer": _WX_UDPSocketSendBuffer,
+  "WX_UDPSocketSendString": _WX_UDPSocketSendString,
+  "WX_UDPSocketSetTTL": _WX_UDPSocketSetTTL,
+  "WX_UDPSocketWriteBuffer": _WX_UDPSocketWriteBuffer,
+  "WX_UDPSocketWriteString": _WX_UDPSocketWriteString,
+  "WX_UploadFile": _WX_UploadFile,
   "__assert_fail": ___assert_fail,
   "__cxa_allocate_exception": ___cxa_allocate_exception,
   "__cxa_begin_catch": ___cxa_begin_catch,
@@ -15577,14 +18519,14 @@ var asmLibraryArg = {
   "invoke_fii": invoke_fii,
   "invoke_fiii": invoke_fiii,
   "invoke_i": invoke_i,
+  "invoke_ifi": invoke_ifi,
   "invoke_ii": invoke_ii,
+  "invoke_iiffi": invoke_iiffi,
   "invoke_iifi": invoke_iifi,
   "invoke_iii": invoke_iii,
   "invoke_iiifi": invoke_iiifi,
-  "invoke_iiifii": invoke_iiifii,
   "invoke_iiifiii": invoke_iiifiii,
   "invoke_iiii": invoke_iiii,
-  "invoke_iiiidii": invoke_iiiidii,
   "invoke_iiiifiii": invoke_iiiifiii,
   "invoke_iiiii": invoke_iiiii,
   "invoke_iiiiii": invoke_iiiiii,
@@ -15595,13 +18537,10 @@ var asmLibraryArg = {
   "invoke_iiiiiiiiiii": invoke_iiiiiiiiiii,
   "invoke_iiiiiiiiiiii": invoke_iiiiiiiiiiii,
   "invoke_iiiiiiiiiji": invoke_iiiiiiiiiji,
-  "invoke_iiiijii": invoke_iiiijii,
   "invoke_iiijiii": invoke_iiijiii,
   "invoke_iij": invoke_iij,
-  "invoke_iijfii": invoke_iijfii,
   "invoke_iiji": invoke_iiji,
   "invoke_iijii": invoke_iijii,
-  "invoke_iijiii": invoke_iijiii,
   "invoke_iijji": invoke_iijji,
   "invoke_iji": invoke_iji,
   "invoke_ijji": invoke_ijji,
@@ -15617,32 +18556,31 @@ var asmLibraryArg = {
   "invoke_v": invoke_v,
   "invoke_vi": invoke_vi,
   "invoke_vidd": invoke_vidd,
-  "invoke_vidi": invoke_vidi,
   "invoke_vifffiifi": invoke_vifffiifi,
   "invoke_viffi": invoke_viffi,
   "invoke_vifi": invoke_vifi,
   "invoke_vifii": invoke_vifii,
+  "invoke_vifiii": invoke_vifiii,
   "invoke_vii": invoke_vii,
-  "invoke_viidi": invoke_viidi,
   "invoke_viifffffii": invoke_viifffffii,
   "invoke_viiffi": invoke_viiffi,
+  "invoke_viiffiffii": invoke_viiffiffii,
   "invoke_viifi": invoke_viifi,
   "invoke_viifii": invoke_viifii,
   "invoke_viii": invoke_viii,
   "invoke_viiiffffi": invoke_viiiffffi,
+  "invoke_viiifi": invoke_viiifi,
   "invoke_viiii": invoke_viiii,
   "invoke_viiiifi": invoke_viiiifi,
   "invoke_viiiii": invoke_viiiii,
   "invoke_viiiiii": invoke_viiiiii,
   "invoke_viiiiiii": invoke_viiiiiii,
   "invoke_viiiiiiii": invoke_viiiiiiii,
-  "invoke_viiiiiiiii": invoke_viiiiiiiii,
   "invoke_viiiiiiiiii": invoke_viiiiiiiiii,
   "invoke_viiiji": invoke_viiiji,
   "invoke_viiji": invoke_viiji,
-  "invoke_vijfi": invoke_vijfi,
+  "invoke_viijiiiiii": invoke_viijiiiiii,
   "invoke_viji": invoke_viji,
-  "invoke_vijii": invoke_vijii,
   "invoke_vijiii": invoke_vijiii,
   "invoke_vji": invoke_vji,
   "invoke_vjiiiii": invoke_vjiiiii,
@@ -15708,6 +18646,9 @@ var _free = Module["_free"] = createExportWrapper("free");
 
 /** @type {function(...*):?} */
 var _emscripten_builtin_memalign = Module["_emscripten_builtin_memalign"] = createExportWrapper("emscripten_builtin_memalign");
+
+/** @type {function(...*):?} */
+var _sbrk = Module["_sbrk"] = createExportWrapper("sbrk");
 
 /** @type {function(...*):?} */
 var _setThrew = Module["_setThrew"] = createExportWrapper("setThrew");
@@ -15814,61 +18755,28 @@ var dynCall_iiiiiii = Module["dynCall_iiiiiii"] = createExportWrapper("dynCall_i
 var dynCall_jii = Module["dynCall_jii"] = createExportWrapper("dynCall_jii");
 
 /** @type {function(...*):?} */
-var dynCall_iiiidii = Module["dynCall_iiiidii"] = createExportWrapper("dynCall_iiiidii");
-
-/** @type {function(...*):?} */
-var dynCall_vidi = Module["dynCall_vidi"] = createExportWrapper("dynCall_vidi");
-
-/** @type {function(...*):?} */
-var dynCall_viidi = Module["dynCall_viidi"] = createExportWrapper("dynCall_viidi");
-
-/** @type {function(...*):?} */
-var dynCall_iiiijii = Module["dynCall_iiiijii"] = createExportWrapper("dynCall_iiiijii");
-
-/** @type {function(...*):?} */
-var dynCall_viiiiiiiiii = Module["dynCall_viiiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiiii");
-
-/** @type {function(...*):?} */
-var dynCall_iiiiiiiiiji = Module["dynCall_iiiiiiiiiji"] = createExportWrapper("dynCall_iiiiiiiiiji");
-
-/** @type {function(...*):?} */
-var dynCall_vji = Module["dynCall_vji"] = createExportWrapper("dynCall_vji");
-
-/** @type {function(...*):?} */
-var dynCall_vijii = Module["dynCall_vijii"] = createExportWrapper("dynCall_vijii");
-
-/** @type {function(...*):?} */
-var dynCall_iijiii = Module["dynCall_iijiii"] = createExportWrapper("dynCall_iijiii");
-
-/** @type {function(...*):?} */
 var dynCall_viifi = Module["dynCall_viifi"] = createExportWrapper("dynCall_viifi");
 
 /** @type {function(...*):?} */
-var dynCall_iiifii = Module["dynCall_iiifii"] = createExportWrapper("dynCall_iiifii");
+var dynCall_dii = Module["dynCall_dii"] = createExportWrapper("dynCall_dii");
 
 /** @type {function(...*):?} */
-var dynCall_vijfi = Module["dynCall_vijfi"] = createExportWrapper("dynCall_vijfi");
-
-/** @type {function(...*):?} */
-var dynCall_iijfii = Module["dynCall_iijfii"] = createExportWrapper("dynCall_iijfii");
-
-/** @type {function(...*):?} */
-var dynCall_iiiiiiiiii = Module["dynCall_iiiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiii");
-
-/** @type {function(...*):?} */
-var dynCall_iiiifii = Module["dynCall_iiiifii"] = createExportWrapper("dynCall_iiiifii");
-
-/** @type {function(...*):?} */
-var dynCall_viiiifii = Module["dynCall_viiiifii"] = createExportWrapper("dynCall_viiiifii");
-
-/** @type {function(...*):?} */
-var dynCall_vifi = Module["dynCall_vifi"] = createExportWrapper("dynCall_vifi");
+var dynCall_iijji = Module["dynCall_iijji"] = createExportWrapper("dynCall_iijji");
 
 /** @type {function(...*):?} */
 var dynCall_viiiiiii = Module["dynCall_viiiiiii"] = createExportWrapper("dynCall_viiiiiii");
 
 /** @type {function(...*):?} */
-var dynCall_iifi = Module["dynCall_iifi"] = createExportWrapper("dynCall_iifi");
+var dynCall_jiii = Module["dynCall_jiii"] = createExportWrapper("dynCall_jiii");
+
+/** @type {function(...*):?} */
+var dynCall_ijji = Module["dynCall_ijji"] = createExportWrapper("dynCall_ijji");
+
+/** @type {function(...*):?} */
+var dynCall_iji = Module["dynCall_iji"] = createExportWrapper("dynCall_iji");
+
+/** @type {function(...*):?} */
+var dynCall_iiiiiiiiii = Module["dynCall_iiiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiii");
 
 /** @type {function(...*):?} */
 var dynCall_fiii = Module["dynCall_fiii"] = createExportWrapper("dynCall_fiii");
@@ -15880,43 +18788,16 @@ var dynCall_fffi = Module["dynCall_fffi"] = createExportWrapper("dynCall_fffi");
 var dynCall_viifii = Module["dynCall_viifii"] = createExportWrapper("dynCall_viifii");
 
 /** @type {function(...*):?} */
-var dynCall_fii = Module["dynCall_fii"] = createExportWrapper("dynCall_fii");
-
-/** @type {function(...*):?} */
-var dynCall_iiiiiiiiiiii = Module["dynCall_iiiiiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiii");
-
-/** @type {function(...*):?} */
-var dynCall_iidi = Module["dynCall_iidi"] = createExportWrapper("dynCall_iidi");
-
-/** @type {function(...*):?} */
-var dynCall_didi = Module["dynCall_didi"] = createExportWrapper("dynCall_didi");
-
-/** @type {function(...*):?} */
-var dynCall_fifi = Module["dynCall_fifi"] = createExportWrapper("dynCall_fifi");
-
-/** @type {function(...*):?} */
-var dynCall_diidi = Module["dynCall_diidi"] = createExportWrapper("dynCall_diidi");
-
-/** @type {function(...*):?} */
-var dynCall_jiiji = Module["dynCall_jiiji"] = createExportWrapper("dynCall_jiiji");
-
-/** @type {function(...*):?} */
-var dynCall_fiifi = Module["dynCall_fiifi"] = createExportWrapper("dynCall_fiifi");
-
-/** @type {function(...*):?} */
-var dynCall_iiffi = Module["dynCall_iiffi"] = createExportWrapper("dynCall_iiffi");
+var dynCall_vifi = Module["dynCall_vifi"] = createExportWrapper("dynCall_vifi");
 
 /** @type {function(...*):?} */
 var dynCall_iiiifi = Module["dynCall_iiiifi"] = createExportWrapper("dynCall_iiiifi");
 
 /** @type {function(...*):?} */
-var dynCall_viiffi = Module["dynCall_viiffi"] = createExportWrapper("dynCall_viiffi");
+var dynCall_iifi = Module["dynCall_iifi"] = createExportWrapper("dynCall_iifi");
 
 /** @type {function(...*):?} */
 var dynCall_ji = Module["dynCall_ji"] = createExportWrapper("dynCall_ji");
-
-/** @type {function(...*):?} */
-var dynCall_viiiji = Module["dynCall_viiiji"] = createExportWrapper("dynCall_viiiji");
 
 /** @type {function(...*):?} */
 var dynCall_fi = Module["dynCall_fi"] = createExportWrapper("dynCall_fi");
@@ -15928,40 +18809,31 @@ var dynCall_iiifi = Module["dynCall_iiifi"] = createExportWrapper("dynCall_iiifi
 var dynCall_viiiifi = Module["dynCall_viiiifi"] = createExportWrapper("dynCall_viiiifi");
 
 /** @type {function(...*):?} */
+var dynCall_fii = Module["dynCall_fii"] = createExportWrapper("dynCall_fii");
+
+/** @type {function(...*):?} */
+var dynCall_iiiiiiiiiiii = Module["dynCall_iiiiiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiii");
+
+/** @type {function(...*):?} */
 var dynCall_fiiffi = Module["dynCall_fiiffi"] = createExportWrapper("dynCall_fiiffi");
 
 /** @type {function(...*):?} */
 var dynCall_viiififii = Module["dynCall_viiififii"] = createExportWrapper("dynCall_viiififii");
 
 /** @type {function(...*):?} */
-var dynCall_vifii = Module["dynCall_vifii"] = createExportWrapper("dynCall_vifii");
+var dynCall_viiiiiiiiii = Module["dynCall_viiiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiiii");
 
 /** @type {function(...*):?} */
-var dynCall_ddiii = Module["dynCall_ddiii"] = createExportWrapper("dynCall_ddiii");
+var dynCall_iiiiiiiiiji = Module["dynCall_iiiiiiiiiji"] = createExportWrapper("dynCall_iiiiiiiiiji");
 
 /** @type {function(...*):?} */
-var dynCall_viiiiiiii = Module["dynCall_viiiiiiii"] = createExportWrapper("dynCall_viiiiiiii");
+var dynCall_vji = Module["dynCall_vji"] = createExportWrapper("dynCall_vji");
 
 /** @type {function(...*):?} */
-var dynCall_iiddi = Module["dynCall_iiddi"] = createExportWrapper("dynCall_iiddi");
+var dynCall_diii = Module["dynCall_diii"] = createExportWrapper("dynCall_diii");
 
 /** @type {function(...*):?} */
-var dynCall_iijji = Module["dynCall_iijji"] = createExportWrapper("dynCall_iijji");
-
-/** @type {function(...*):?} */
-var dynCall_iiiiiiiii = Module["dynCall_iiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiii");
-
-/** @type {function(...*):?} */
-var dynCall_jiii = Module["dynCall_jiii"] = createExportWrapper("dynCall_jiii");
-
-/** @type {function(...*):?} */
-var dynCall_ijji = Module["dynCall_ijji"] = createExportWrapper("dynCall_ijji");
-
-/** @type {function(...*):?} */
-var dynCall_j = Module["dynCall_j"] = createExportWrapper("dynCall_j");
-
-/** @type {function(...*):?} */
-var dynCall_iijii = Module["dynCall_iijii"] = createExportWrapper("dynCall_iijii");
+var dynCall_ifi = Module["dynCall_ifi"] = createExportWrapper("dynCall_ifi");
 
 /** @type {function(...*):?} */
 var dynCall_jiiijii = Module["dynCall_jiiijii"] = createExportWrapper("dynCall_jiiijii");
@@ -15970,25 +18842,31 @@ var dynCall_jiiijii = Module["dynCall_jiiijii"] = createExportWrapper("dynCall_j
 var dynCall_viiijiii = Module["dynCall_viiijiii"] = createExportWrapper("dynCall_viiijiii");
 
 /** @type {function(...*):?} */
-var dynCall_dii = Module["dynCall_dii"] = createExportWrapper("dynCall_dii");
+var dynCall_ddiii = Module["dynCall_ddiii"] = createExportWrapper("dynCall_ddiii");
 
 /** @type {function(...*):?} */
-var dynCall_iji = Module["dynCall_iji"] = createExportWrapper("dynCall_iji");
+var dynCall_viiiji = Module["dynCall_viiiji"] = createExportWrapper("dynCall_viiiji");
 
 /** @type {function(...*):?} */
-var dynCall_jjji = Module["dynCall_jjji"] = createExportWrapper("dynCall_jjji");
+var dynCall_viiiiiiii = Module["dynCall_viiiiiiii"] = createExportWrapper("dynCall_viiiiiiii");
 
 /** @type {function(...*):?} */
-var dynCall_jiiiii = Module["dynCall_jiiiii"] = createExportWrapper("dynCall_jiiiii");
+var dynCall_iiiiiiiii = Module["dynCall_iiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiii");
 
 /** @type {function(...*):?} */
-var dynCall_viiiiiiiii = Module["dynCall_viiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiii");
+var dynCall_vifii = Module["dynCall_vifii"] = createExportWrapper("dynCall_vifii");
+
+/** @type {function(...*):?} */
+var dynCall_viiji = Module["dynCall_viiji"] = createExportWrapper("dynCall_viiji");
+
+/** @type {function(...*):?} */
+var dynCall_iiji = Module["dynCall_iiji"] = createExportWrapper("dynCall_iiji");
 
 /** @type {function(...*):?} */
 var dynCall_jijii = Module["dynCall_jijii"] = createExportWrapper("dynCall_jijii");
 
 /** @type {function(...*):?} */
-var dynCall_vijiii = Module["dynCall_vijiii"] = createExportWrapper("dynCall_vijiii");
+var dynCall_jiiiii = Module["dynCall_jiiiii"] = createExportWrapper("dynCall_jiiiii");
 
 /** @type {function(...*):?} */
 var dynCall_vjjjiiii = Module["dynCall_vjjjiiii"] = createExportWrapper("dynCall_vjjjiiii");
@@ -15997,10 +18875,31 @@ var dynCall_vjjjiiii = Module["dynCall_vjjjiiii"] = createExportWrapper("dynCall
 var dynCall_vjiiiii = Module["dynCall_vjiiiii"] = createExportWrapper("dynCall_vjiiiii");
 
 /** @type {function(...*):?} */
-var dynCall_viiji = Module["dynCall_viiji"] = createExportWrapper("dynCall_viiji");
+var dynCall_viijiiiiii = Module["dynCall_viijiiiiii"] = createExportWrapper("dynCall_viijiiiiii");
 
 /** @type {function(...*):?} */
-var dynCall_iiji = Module["dynCall_iiji"] = createExportWrapper("dynCall_iiji");
+var dynCall_jjji = Module["dynCall_jjji"] = createExportWrapper("dynCall_jjji");
+
+/** @type {function(...*):?} */
+var dynCall_vijiii = Module["dynCall_vijiii"] = createExportWrapper("dynCall_vijiii");
+
+/** @type {function(...*):?} */
+var dynCall_j = Module["dynCall_j"] = createExportWrapper("dynCall_j");
+
+/** @type {function(...*):?} */
+var dynCall_iijii = Module["dynCall_iijii"] = createExportWrapper("dynCall_iijii");
+
+/** @type {function(...*):?} */
+var dynCall_viiffi = Module["dynCall_viiffi"] = createExportWrapper("dynCall_viiffi");
+
+/** @type {function(...*):?} */
+var dynCall_iiiifii = Module["dynCall_iiiifii"] = createExportWrapper("dynCall_iiiifii");
+
+/** @type {function(...*):?} */
+var dynCall_iiifii = Module["dynCall_iiifii"] = createExportWrapper("dynCall_iiifii");
+
+/** @type {function(...*):?} */
+var dynCall_viiiifii = Module["dynCall_viiiifii"] = createExportWrapper("dynCall_viiiifii");
 
 /** @type {function(...*):?} */
 var dynCall_iiifiii = Module["dynCall_iiifiii"] = createExportWrapper("dynCall_iiifiii");
@@ -16015,10 +18914,22 @@ var dynCall_viffi = Module["dynCall_viffi"] = createExportWrapper("dynCall_viffi
 var dynCall_viiiffffi = Module["dynCall_viiiffffi"] = createExportWrapper("dynCall_viiiffffi");
 
 /** @type {function(...*):?} */
-var dynCall_fifiii = Module["dynCall_fifiii"] = createExportWrapper("dynCall_fifiii");
+var dynCall_viiifi = Module["dynCall_viiifi"] = createExportWrapper("dynCall_viiifi");
 
 /** @type {function(...*):?} */
 var dynCall_vifffiifi = Module["dynCall_vifffiifi"] = createExportWrapper("dynCall_vifffiifi");
+
+/** @type {function(...*):?} */
+var dynCall_fifiii = Module["dynCall_fifiii"] = createExportWrapper("dynCall_fifiii");
+
+/** @type {function(...*):?} */
+var dynCall_vifiii = Module["dynCall_vifiii"] = createExportWrapper("dynCall_vifiii");
+
+/** @type {function(...*):?} */
+var dynCall_iiffi = Module["dynCall_iiffi"] = createExportWrapper("dynCall_iiffi");
+
+/** @type {function(...*):?} */
+var dynCall_viiffiffii = Module["dynCall_viiffiffii"] = createExportWrapper("dynCall_viiffiffii");
 
 /** @type {function(...*):?} */
 var dynCall_iiiifiii = Module["dynCall_iiiifiii"] = createExportWrapper("dynCall_iiiifiii");
@@ -16087,6 +18998,9 @@ var dynCall_iiiiiiiiiiiiiiii = Module["dynCall_iiiiiiiiiiiiiiii"] = createExport
 var dynCall_iiiiiiiiiiiii = Module["dynCall_iiiiiiiiiiiii"] = createExportWrapper("dynCall_iiiiiiiiiiiii");
 
 /** @type {function(...*):?} */
+var dynCall_viiiiiiiii = Module["dynCall_viiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiii");
+
+/** @type {function(...*):?} */
 var dynCall_iiiifiiii = Module["dynCall_iiiifiiii"] = createExportWrapper("dynCall_iiiifiiii");
 
 /** @type {function(...*):?} */
@@ -16099,19 +19013,16 @@ var dynCall_ffi = Module["dynCall_ffi"] = createExportWrapper("dynCall_ffi");
 var dynCall_fiiiiii = Module["dynCall_fiiiiii"] = createExportWrapper("dynCall_fiiiiii");
 
 /** @type {function(...*):?} */
-var dynCall_viiifi = Module["dynCall_viiifi"] = createExportWrapper("dynCall_viiifi");
-
-/** @type {function(...*):?} */
 var dynCall_ffii = Module["dynCall_ffii"] = createExportWrapper("dynCall_ffii");
 
 /** @type {function(...*):?} */
-var dynCall_vifiii = Module["dynCall_vifiii"] = createExportWrapper("dynCall_vifiii");
+var dynCall_fifi = Module["dynCall_fifi"] = createExportWrapper("dynCall_fifi");
 
 /** @type {function(...*):?} */
 var dynCall_viffii = Module["dynCall_viffii"] = createExportWrapper("dynCall_viffii");
 
 /** @type {function(...*):?} */
-var dynCall_viiffiffii = Module["dynCall_viiffiffii"] = createExportWrapper("dynCall_viiffiffii");
+var dynCall_fiifi = Module["dynCall_fiifi"] = createExportWrapper("dynCall_fiifi");
 
 /** @type {function(...*):?} */
 var dynCall_viiiiffi = Module["dynCall_viiiiffi"] = createExportWrapper("dynCall_viiiiffi");
@@ -16153,9 +19064,6 @@ var dynCall_viifffii = Module["dynCall_viifffii"] = createExportWrapper("dynCall
 var dynCall_iiiifffiffi = Module["dynCall_iiiifffiffi"] = createExportWrapper("dynCall_iiiifffiffi");
 
 /** @type {function(...*):?} */
-var dynCall_ifi = Module["dynCall_ifi"] = createExportWrapper("dynCall_ifi");
-
-/** @type {function(...*):?} */
 var dynCall_iiiiiiffffi = Module["dynCall_iiiiiiffffi"] = createExportWrapper("dynCall_iiiiiiffffi");
 
 /** @type {function(...*):?} */
@@ -16166,6 +19074,9 @@ var dynCall_iiiiifii = Module["dynCall_iiiiifii"] = createExportWrapper("dynCall
 
 /** @type {function(...*):?} */
 var dynCall_iiiiffi = Module["dynCall_iiiiffi"] = createExportWrapper("dynCall_iiiiffi");
+
+/** @type {function(...*):?} */
+var dynCall_viiifffi = Module["dynCall_viiifffi"] = createExportWrapper("dynCall_viiifffi");
 
 /** @type {function(...*):?} */
 var dynCall_fffiii = Module["dynCall_fffiii"] = createExportWrapper("dynCall_fffiii");
@@ -16201,10 +19112,16 @@ var dynCall_viiifii = Module["dynCall_viiifii"] = createExportWrapper("dynCall_v
 var dynCall_iiiiiffffiiii = Module["dynCall_iiiiiffffiiii"] = createExportWrapper("dynCall_iiiiiffffiiii");
 
 /** @type {function(...*):?} */
-var dynCall_iiiji = Module["dynCall_iiiji"] = createExportWrapper("dynCall_iiiji");
+var dynCall_vidi = Module["dynCall_vidi"] = createExportWrapper("dynCall_vidi");
 
 /** @type {function(...*):?} */
 var dynCall_viji = Module["dynCall_viji"] = createExportWrapper("dynCall_viji");
+
+/** @type {function(...*):?} */
+var dynCall_idi = Module["dynCall_idi"] = createExportWrapper("dynCall_idi");
+
+/** @type {function(...*):?} */
+var dynCall_iiiji = Module["dynCall_iiiji"] = createExportWrapper("dynCall_iiiji");
 
 /** @type {function(...*):?} */
 var dynCall_viiiiiiiiiiiiii = Module["dynCall_viiiiiiiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiiiiiiii");
@@ -16219,10 +19136,22 @@ var dynCall_iiiiiiiiiii = Module["dynCall_iiiiiiiiiii"] = createExportWrapper("d
 var dynCall_viiijii = Module["dynCall_viiijii"] = createExportWrapper("dynCall_viiijii");
 
 /** @type {function(...*):?} */
-var dynCall_ijjiii = Module["dynCall_ijjiii"] = createExportWrapper("dynCall_ijjiii");
+var dynCall_jiiii = Module["dynCall_jiiii"] = createExportWrapper("dynCall_jiiii");
+
+/** @type {function(...*):?} */
+var dynCall_vjii = Module["dynCall_vjii"] = createExportWrapper("dynCall_vjii");
+
+/** @type {function(...*):?} */
+var dynCall_jji = Module["dynCall_jji"] = createExportWrapper("dynCall_jji");
+
+/** @type {function(...*):?} */
+var dynCall_ijii = Module["dynCall_ijii"] = createExportWrapper("dynCall_ijii");
 
 /** @type {function(...*):?} */
 var dynCall_ijiiii = Module["dynCall_ijiiii"] = createExportWrapper("dynCall_ijiiii");
+
+/** @type {function(...*):?} */
+var dynCall_ijjiii = Module["dynCall_ijjiii"] = createExportWrapper("dynCall_ijjiii");
 
 /** @type {function(...*):?} */
 var dynCall_ijiii = Module["dynCall_ijiii"] = createExportWrapper("dynCall_ijiii");
@@ -16261,9 +19190,6 @@ var dynCall_fffifffi = Module["dynCall_fffifffi"] = createExportWrapper("dynCall
 var dynCall_fdi = Module["dynCall_fdi"] = createExportWrapper("dynCall_fdi");
 
 /** @type {function(...*):?} */
-var dynCall_idi = Module["dynCall_idi"] = createExportWrapper("dynCall_idi");
-
-/** @type {function(...*):?} */
 var dynCall_dddi = Module["dynCall_dddi"] = createExportWrapper("dynCall_dddi");
 
 /** @type {function(...*):?} */
@@ -16274,9 +19200,6 @@ var dynCall_vfii = Module["dynCall_vfii"] = createExportWrapper("dynCall_vfii");
 
 /** @type {function(...*):?} */
 var dynCall_ddddi = Module["dynCall_ddddi"] = createExportWrapper("dynCall_ddddi");
-
-/** @type {function(...*):?} */
-var dynCall_jji = Module["dynCall_jji"] = createExportWrapper("dynCall_jji");
 
 /** @type {function(...*):?} */
 var dynCall_jjjji = Module["dynCall_jjjji"] = createExportWrapper("dynCall_jjjji");
@@ -16327,6 +19250,9 @@ var dynCall_viiiiiffii = Module["dynCall_viiiiiffii"] = createExportWrapper("dyn
 var dynCall_viffffii = Module["dynCall_viffffii"] = createExportWrapper("dynCall_viffffii");
 
 /** @type {function(...*):?} */
+var dynCall_viffffiii = Module["dynCall_viffffiii"] = createExportWrapper("dynCall_viffffiii");
+
+/** @type {function(...*):?} */
 var dynCall_viiffffiiiiii = Module["dynCall_viiffffiiiiii"] = createExportWrapper("dynCall_viiffffiiiiii");
 
 /** @type {function(...*):?} */
@@ -16375,7 +19301,7 @@ var dynCall_fiffi = Module["dynCall_fiffi"] = createExportWrapper("dynCall_fiffi
 var dynCall_viijji = Module["dynCall_viijji"] = createExportWrapper("dynCall_viijji");
 
 /** @type {function(...*):?} */
-var dynCall_diii = Module["dynCall_diii"] = createExportWrapper("dynCall_diii");
+var dynCall_iidi = Module["dynCall_iidi"] = createExportWrapper("dynCall_iidi");
 
 /** @type {function(...*):?} */
 var dynCall_viiidi = Module["dynCall_viiidi"] = createExportWrapper("dynCall_viiidi");
@@ -16403,6 +19329,9 @@ var dynCall_fffffffi = Module["dynCall_fffffffi"] = createExportWrapper("dynCall
 
 /** @type {function(...*):?} */
 var dynCall_viiffifi = Module["dynCall_viiffifi"] = createExportWrapper("dynCall_viiffifi");
+
+/** @type {function(...*):?} */
+var dynCall_iijiii = Module["dynCall_iijiii"] = createExportWrapper("dynCall_iijiii");
 
 /** @type {function(...*):?} */
 var dynCall_viiiffiiiiiiiii = Module["dynCall_viiiffiiiiiiiii"] = createExportWrapper("dynCall_viiiffiiiiiiiii");
@@ -16435,22 +19364,19 @@ var dynCall_fiiiffi = Module["dynCall_fiiiffi"] = createExportWrapper("dynCall_f
 var dynCall_diiii = Module["dynCall_diiii"] = createExportWrapper("dynCall_diiii");
 
 /** @type {function(...*):?} */
-var dynCall_jiiii = Module["dynCall_jiiii"] = createExportWrapper("dynCall_jiiii");
+var dynCall_didi = Module["dynCall_didi"] = createExportWrapper("dynCall_didi");
 
 /** @type {function(...*):?} */
-var dynCall_ijii = Module["dynCall_ijii"] = createExportWrapper("dynCall_ijii");
+var dynCall_diidi = Module["dynCall_diidi"] = createExportWrapper("dynCall_diidi");
 
 /** @type {function(...*):?} */
-var dynCall_vjii = Module["dynCall_vjii"] = createExportWrapper("dynCall_vjii");
+var dynCall_jiiji = Module["dynCall_jiiji"] = createExportWrapper("dynCall_jiiji");
 
 /** @type {function(...*):?} */
 var dynCall_viiiiiiiijiiii = Module["dynCall_viiiiiiiijiiii"] = createExportWrapper("dynCall_viiiiiiiijiiii");
 
 /** @type {function(...*):?} */
 var dynCall_viiiiiifiiiiii = Module["dynCall_viiiiiifiiiiii"] = createExportWrapper("dynCall_viiiiiifiiiiii");
-
-/** @type {function(...*):?} */
-var dynCall_viffffiii = Module["dynCall_viffffiii"] = createExportWrapper("dynCall_viffffiii");
 
 /** @type {function(...*):?} */
 var dynCall_viiiiiiiiiiii = Module["dynCall_viiiiiiiiiiii"] = createExportWrapper("dynCall_viiiiiiiiiiii");
@@ -16466,9 +19392,6 @@ var dynCall_fifii = Module["dynCall_fifii"] = createExportWrapper("dynCall_fifii
 
 /** @type {function(...*):?} */
 var dynCall_vifffii = Module["dynCall_vifffii"] = createExportWrapper("dynCall_vifffii");
-
-/** @type {function(...*):?} */
-var dynCall_viiifffi = Module["dynCall_viiifffi"] = createExportWrapper("dynCall_viiifffi");
 
 /** @type {function(...*):?} */
 var dynCall_viiiiiffi = Module["dynCall_viiiiiffi"] = createExportWrapper("dynCall_viiiiiffi");
@@ -16504,7 +19427,28 @@ var dynCall_viijiii = Module["dynCall_viijiii"] = createExportWrapper("dynCall_v
 var dynCall_jjii = Module["dynCall_jjii"] = createExportWrapper("dynCall_jjii");
 
 /** @type {function(...*):?} */
+var dynCall_jiiiiffffii = Module["dynCall_jiiiiffffii"] = createExportWrapper("dynCall_jiiiiffffii");
+
+/** @type {function(...*):?} */
+var dynCall_viijiiii = Module["dynCall_viijiiii"] = createExportWrapper("dynCall_viijiiii");
+
+/** @type {function(...*):?} */
 var dynCall_viffffffffffffffffi = Module["dynCall_viffffffffffffffffi"] = createExportWrapper("dynCall_viffffffffffffffffi");
+
+/** @type {function(...*):?} */
+var dynCall_viijii = Module["dynCall_viijii"] = createExportWrapper("dynCall_viijii");
+
+/** @type {function(...*):?} */
+var dynCall_vddii = Module["dynCall_vddii"] = createExportWrapper("dynCall_vddii");
+
+/** @type {function(...*):?} */
+var dynCall_iddii = Module["dynCall_iddii"] = createExportWrapper("dynCall_iddii");
+
+/** @type {function(...*):?} */
+var dynCall_iiddi = Module["dynCall_iiddi"] = createExportWrapper("dynCall_iiddi");
+
+/** @type {function(...*):?} */
+var dynCall_vdi = Module["dynCall_vdi"] = createExportWrapper("dynCall_vdi");
 
 /** @type {function(...*):?} */
 var dynCall_idiiii = Module["dynCall_idiiii"] = createExportWrapper("dynCall_idiiii");
@@ -16526,9 +19470,6 @@ var dynCall_jjiiii = Module["dynCall_jjiiii"] = createExportWrapper("dynCall_jji
 
 /** @type {function(...*):?} */
 var dynCall_jjiiiii = Module["dynCall_jjiiiii"] = createExportWrapper("dynCall_jjiiiii");
-
-/** @type {function(...*):?} */
-var dynCall_viijiiiiii = Module["dynCall_viijiiiiii"] = createExportWrapper("dynCall_viijiiiiii");
 
 /** @type {function(...*):?} */
 var dynCall_iijiiiiii = Module["dynCall_iijiiiiii"] = createExportWrapper("dynCall_iijiiiiii");
@@ -16567,16 +19508,25 @@ var dynCall_vijiiii = Module["dynCall_vijiiii"] = createExportWrapper("dynCall_v
 var dynCall_jdi = Module["dynCall_jdi"] = createExportWrapper("dynCall_jdi");
 
 /** @type {function(...*):?} */
+var dynCall_dji = Module["dynCall_dji"] = createExportWrapper("dynCall_dji");
+
+/** @type {function(...*):?} */
 var dynCall_jfi = Module["dynCall_jfi"] = createExportWrapper("dynCall_jfi");
 
 /** @type {function(...*):?} */
 var dynCall_fji = Module["dynCall_fji"] = createExportWrapper("dynCall_fji");
 
 /** @type {function(...*):?} */
-var dynCall_dji = Module["dynCall_dji"] = createExportWrapper("dynCall_dji");
+var dynCall_dfi = Module["dynCall_dfi"] = createExportWrapper("dynCall_dfi");
 
 /** @type {function(...*):?} */
-var dynCall_dfi = Module["dynCall_dfi"] = createExportWrapper("dynCall_dfi");
+var dynCall_ifii = Module["dynCall_ifii"] = createExportWrapper("dynCall_ifii");
+
+/** @type {function(...*):?} */
+var dynCall_idii = Module["dynCall_idii"] = createExportWrapper("dynCall_idii");
+
+/** @type {function(...*):?} */
+var dynCall_vijii = Module["dynCall_vijii"] = createExportWrapper("dynCall_vijii");
 
 /** @type {function(...*):?} */
 var dynCall_jidii = Module["dynCall_jidii"] = createExportWrapper("dynCall_jidii");
@@ -16645,6 +19595,9 @@ var dynCall_viijjji = Module["dynCall_viijjji"] = createExportWrapper("dynCall_v
 var dynCall_vdii = Module["dynCall_vdii"] = createExportWrapper("dynCall_vdii");
 
 /** @type {function(...*):?} */
+var dynCall_iiiijii = Module["dynCall_iiiijii"] = createExportWrapper("dynCall_iiiijii");
+
+/** @type {function(...*):?} */
 var dynCall_diddi = Module["dynCall_diddi"] = createExportWrapper("dynCall_diddi");
 
 /** @type {function(...*):?} */
@@ -16681,49 +19634,22 @@ var dynCall_vijjji = Module["dynCall_vijjji"] = createExportWrapper("dynCall_vij
 var dynCall_jiiiiiiiiii = Module["dynCall_jiiiiiiiiii"] = createExportWrapper("dynCall_jiiiiiiiiii");
 
 /** @type {function(...*):?} */
-var dynCall_iiiiidii = Module["dynCall_iiiiidii"] = createExportWrapper("dynCall_iiiiidii");
+var dynCall_viidi = Module["dynCall_viidi"] = createExportWrapper("dynCall_viidi");
 
 /** @type {function(...*):?} */
-var dynCall_iiiiijii = Module["dynCall_iiiiijii"] = createExportWrapper("dynCall_iiiiijii");
+var dynCall_viddii = Module["dynCall_viddii"] = createExportWrapper("dynCall_viddii");
 
 /** @type {function(...*):?} */
-var dynCall_iddi = Module["dynCall_iddi"] = createExportWrapper("dynCall_iddi");
+var dynCall_iiiddi = Module["dynCall_iiiddi"] = createExportWrapper("dynCall_iiiddi");
 
 /** @type {function(...*):?} */
-var dynCall_iijfi = Module["dynCall_iijfi"] = createExportWrapper("dynCall_iijfi");
+var dynCall_iiiddiii = Module["dynCall_iiiddiii"] = createExportWrapper("dynCall_iiiddiii");
 
 /** @type {function(...*):?} */
-var dynCall_fiji = Module["dynCall_fiji"] = createExportWrapper("dynCall_fiji");
-
-/** @type {function(...*):?} */
-var dynCall_iiidiii = Module["dynCall_iiidiii"] = createExportWrapper("dynCall_iiidiii");
-
-/** @type {function(...*):?} */
-var dynCall_iidii = Module["dynCall_iidii"] = createExportWrapper("dynCall_iidii");
+var dynCall_iiififfii = Module["dynCall_iiififfii"] = createExportWrapper("dynCall_iiififfii");
 
 /** @type {function(...*):?} */
 var dynCall_viifffiii = Module["dynCall_viifffiii"] = createExportWrapper("dynCall_viifffiii");
-
-/** @type {function(...*):?} */
-var dynCall_iiiiffiiiji = Module["dynCall_iiiiffiiiji"] = createExportWrapper("dynCall_iiiiffiiiji");
-
-/** @type {function(...*):?} */
-var dynCall_iiiiffiiiii = Module["dynCall_iiiiffiiiii"] = createExportWrapper("dynCall_iiiiffiiiii");
-
-/** @type {function(...*):?} */
-var dynCall_diiiidi = Module["dynCall_diiiidi"] = createExportWrapper("dynCall_diiiidi");
-
-/** @type {function(...*):?} */
-var dynCall_jiiiiji = Module["dynCall_jiiiiji"] = createExportWrapper("dynCall_jiiiiji");
-
-/** @type {function(...*):?} */
-var dynCall_fiiiifi = Module["dynCall_fiiiifi"] = createExportWrapper("dynCall_fiiiifi");
-
-/** @type {function(...*):?} */
-var dynCall_iiidi = Module["dynCall_iiidi"] = createExportWrapper("dynCall_iiidi");
-
-/** @type {function(...*):?} */
-var dynCall_vdi = Module["dynCall_vdi"] = createExportWrapper("dynCall_vdi");
 
 /** @type {function(...*):?} */
 var dynCall_fff = Module["dynCall_fff"] = createExportWrapper("dynCall_fff");
@@ -16844,6 +19770,9 @@ var dynCall_ff = Module["dynCall_ff"] = createExportWrapper("dynCall_ff");
 
 /** @type {function(...*):?} */
 var dynCall_iiififi = Module["dynCall_iiififi"] = createExportWrapper("dynCall_iiififi");
+
+/** @type {function(...*):?} */
+var dynCall_fiif = Module["dynCall_fiif"] = createExportWrapper("dynCall_fiif");
 
 /** @type {function(...*):?} */
 var dynCall_iiiiiiffiiiiiiiiiffffiii = Module["dynCall_iiiiiiffiiiiiiiiiffffiii"] = createExportWrapper("dynCall_iiiiiiffiiiiiiiiiffffiii");
@@ -17095,43 +20024,10 @@ function invoke_viiiii(index,a1,a2,a3,a4,a5) {
   }
 }
 
-function invoke_iiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8) {
+function invoke_viifi(index,a1,a2,a3,a4) {
   var sp = stackSave();
   try {
-    return dynCall_iiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_ddiii(index,a1,a2,a3,a4) {
-  var sp = stackSave();
-  try {
-    return dynCall_ddiii(index,a1,a2,a3,a4);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_vidi(index,a1,a2,a3) {
-  var sp = stackSave();
-  try {
-    dynCall_vidi(index,a1,a2,a3);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_viidi(index,a1,a2,a3,a4) {
-  var sp = stackSave();
-  try {
-    dynCall_viidi(index,a1,a2,a3,a4);
+    dynCall_viifi(index,a1,a2,a3,a4);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17150,32 +20046,10 @@ function invoke_dii(index,a1,a2) {
   }
 }
 
-function invoke_iiiidii(index,a1,a2,a3,a4,a5,a6) {
+function invoke_ddiii(index,a1,a2,a3,a4) {
   var sp = stackSave();
   try {
-    return dynCall_iiiidii(index,a1,a2,a3,a4,a5,a6);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_viifi(index,a1,a2,a3,a4) {
-  var sp = stackSave();
-  try {
-    dynCall_viifi(index,a1,a2,a3,a4);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_iiifii(index,a1,a2,a3,a4,a5) {
-  var sp = stackSave();
-  try {
-    return dynCall_iiifii(index,a1,a2,a3,a4,a5);
+    return dynCall_ddiii(index,a1,a2,a3,a4);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17205,17 +20079,6 @@ function invoke_viffi(index,a1,a2,a3,a4) {
   }
 }
 
-function invoke_vifi(index,a1,a2,a3) {
-  var sp = stackSave();
-  try {
-    dynCall_vifi(index,a1,a2,a3);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
 function invoke_fffi(index,a1,a2,a3) {
   var sp = stackSave();
   try {
@@ -17238,10 +20101,10 @@ function invoke_viifii(index,a1,a2,a3,a4,a5) {
   }
 }
 
-function invoke_iifi(index,a1,a2,a3) {
+function invoke_vifi(index,a1,a2,a3) {
   var sp = stackSave();
   try {
-    return dynCall_iifi(index,a1,a2,a3);
+    dynCall_vifi(index,a1,a2,a3);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17260,10 +20123,10 @@ function invoke_fii(index,a1,a2) {
   }
 }
 
-function invoke_viiffi(index,a1,a2,a3,a4,a5) {
+function invoke_iifi(index,a1,a2,a3) {
   var sp = stackSave();
   try {
-    dynCall_viiffi(index,a1,a2,a3,a4,a5);
+    return dynCall_iifi(index,a1,a2,a3);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17304,6 +20167,28 @@ function invoke_viiiifi(index,a1,a2,a3,a4,a5,a6) {
   }
 }
 
+function invoke_ifi(index,a1,a2) {
+  var sp = stackSave();
+  try {
+    return dynCall_ifi(index,a1,a2);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_iiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8) {
+  var sp = stackSave();
+  try {
+    return dynCall_iiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
 function invoke_vifii(index,a1,a2,a3,a4) {
   var sp = stackSave();
   try {
@@ -17326,10 +20211,21 @@ function invoke_viiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8) {
   }
 }
 
-function invoke_viiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9) {
+function invoke_viiffi(index,a1,a2,a3,a4,a5) {
   var sp = stackSave();
   try {
-    dynCall_viiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9);
+    dynCall_viiffi(index,a1,a2,a3,a4,a5);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_viiifi(index,a1,a2,a3,a4,a5) {
+  var sp = stackSave();
+  try {
+    dynCall_viiifi(index,a1,a2,a3,a4,a5);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17370,6 +20266,17 @@ function invoke_viiiffffi(index,a1,a2,a3,a4,a5,a6,a7,a8) {
   }
 }
 
+function invoke_vifffiifi(index,a1,a2,a3,a4,a5,a6,a7,a8) {
+  var sp = stackSave();
+  try {
+    dynCall_vifffiifi(index,a1,a2,a3,a4,a5,a6,a7,a8);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
 function invoke_fifiii(index,a1,a2,a3,a4,a5) {
   var sp = stackSave();
   try {
@@ -17381,10 +20288,32 @@ function invoke_fifiii(index,a1,a2,a3,a4,a5) {
   }
 }
 
-function invoke_vifffiifi(index,a1,a2,a3,a4,a5,a6,a7,a8) {
+function invoke_vifiii(index,a1,a2,a3,a4,a5) {
   var sp = stackSave();
   try {
-    dynCall_vifffiifi(index,a1,a2,a3,a4,a5,a6,a7,a8);
+    dynCall_vifiii(index,a1,a2,a3,a4,a5);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_iiffi(index,a1,a2,a3,a4) {
+  var sp = stackSave();
+  try {
+    return dynCall_iiffi(index,a1,a2,a3,a4);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_viiffiffii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9) {
+  var sp = stackSave();
+  try {
+    dynCall_viiffiffii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17469,10 +20398,10 @@ function invoke_j(index) {
   }
 }
 
-function invoke_iji(index,a1,a2,a3) {
+function invoke_viiji(index,a1,a2,a3,a4,a5) {
   var sp = stackSave();
   try {
-    return dynCall_iji(index,a1,a2,a3);
+    dynCall_viiji(index,a1,a2,a3,a4,a5);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17480,120 +20409,10 @@ function invoke_iji(index,a1,a2,a3) {
   }
 }
 
-function invoke_jjji(index,a1,a2,a3,a4,a5) {
+function invoke_jiiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) {
   var sp = stackSave();
   try {
-    return dynCall_jjji(index,a1,a2,a3,a4,a5);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_iiiiiiiiiji(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11) {
-  var sp = stackSave();
-  try {
-    return dynCall_iiiiiiiiiji(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_vji(index,a1,a2,a3) {
-  var sp = stackSave();
-  try {
-    dynCall_vji(index,a1,a2,a3);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_iiiijii(index,a1,a2,a3,a4,a5,a6,a7) {
-  var sp = stackSave();
-  try {
-    return dynCall_iiiijii(index,a1,a2,a3,a4,a5,a6,a7);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_vijii(index,a1,a2,a3,a4,a5) {
-  var sp = stackSave();
-  try {
-    dynCall_vijii(index,a1,a2,a3,a4,a5);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_iijiii(index,a1,a2,a3,a4,a5,a6) {
-  var sp = stackSave();
-  try {
-    return dynCall_iijiii(index,a1,a2,a3,a4,a5,a6);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_vijfi(index,a1,a2,a3,a4,a5) {
-  var sp = stackSave();
-  try {
-    dynCall_vijfi(index,a1,a2,a3,a4,a5);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_iijfii(index,a1,a2,a3,a4,a5,a6) {
-  var sp = stackSave();
-  try {
-    return dynCall_iijfii(index,a1,a2,a3,a4,a5,a6);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_viji(index,a1,a2,a3,a4) {
-  var sp = stackSave();
-  try {
-    dynCall_viji(index,a1,a2,a3,a4);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_jiii(index,a1,a2,a3) {
-  var sp = stackSave();
-  try {
-    return dynCall_jiii(index,a1,a2,a3);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_viiiji(index,a1,a2,a3,a4,a5,a6) {
-  var sp = stackSave();
-  try {
-    dynCall_viiiji(index,a1,a2,a3,a4,a5,a6);
+    return dynCall_jiiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17634,10 +20453,76 @@ function invoke_iijji(index,a1,a2,a3,a4,a5,a6) {
   }
 }
 
-function invoke_iijii(index,a1,a2,a3,a4,a5) {
+function invoke_iji(index,a1,a2,a3) {
   var sp = stackSave();
   try {
-    return dynCall_iijii(index,a1,a2,a3,a4,a5);
+    return dynCall_iji(index,a1,a2,a3);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_iiiiiiiiiji(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11) {
+  var sp = stackSave();
+  try {
+    return dynCall_iiiiiiiiiji(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_vji(index,a1,a2,a3) {
+  var sp = stackSave();
+  try {
+    dynCall_vji(index,a1,a2,a3);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_viji(index,a1,a2,a3,a4) {
+  var sp = stackSave();
+  try {
+    dynCall_viji(index,a1,a2,a3,a4);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_jiii(index,a1,a2,a3) {
+  var sp = stackSave();
+  try {
+    return dynCall_jiii(index,a1,a2,a3);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_viiiji(index,a1,a2,a3,a4,a5,a6) {
+  var sp = stackSave();
+  try {
+    dynCall_viiiji(index,a1,a2,a3,a4,a5,a6);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_iiji(index,a1,a2,a3,a4) {
+  var sp = stackSave();
+  try {
+    return dynCall_iiji(index,a1,a2,a3,a4);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17656,32 +20541,10 @@ function invoke_jijii(index,a1,a2,a3,a4,a5) {
   }
 }
 
-function invoke_jiiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) {
-  var sp = stackSave();
-  try {
-    return dynCall_jiiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
 function invoke_jiiiii(index,a1,a2,a3,a4,a5) {
   var sp = stackSave();
   try {
     return dynCall_jiiiii(index,a1,a2,a3,a4,a5);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_vijiii(index,a1,a2,a3,a4,a5,a6) {
-  var sp = stackSave();
-  try {
-    dynCall_vijiii(index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17711,10 +20574,10 @@ function invoke_vjiiiii(index,a1,a2,a3,a4,a5,a6,a7) {
   }
 }
 
-function invoke_viiji(index,a1,a2,a3,a4,a5) {
+function invoke_viijiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) {
   var sp = stackSave();
   try {
-    dynCall_viiji(index,a1,a2,a3,a4,a5);
+    dynCall_viijiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17722,10 +20585,32 @@ function invoke_viiji(index,a1,a2,a3,a4,a5) {
   }
 }
 
-function invoke_iiji(index,a1,a2,a3,a4) {
+function invoke_jjji(index,a1,a2,a3,a4,a5) {
   var sp = stackSave();
   try {
-    return dynCall_iiji(index,a1,a2,a3,a4);
+    return dynCall_jjji(index,a1,a2,a3,a4,a5);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_vijiii(index,a1,a2,a3,a4,a5,a6) {
+  var sp = stackSave();
+  try {
+    dynCall_vijiii(index,a1,a2,a3,a4,a5,a6);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_iijii(index,a1,a2,a3,a4,a5) {
+  var sp = stackSave();
+  try {
+    return dynCall_iijii(index,a1,a2,a3,a4,a5);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
@@ -17748,8 +20633,8 @@ unexportedRuntimeFunction('allocate', false);
 unexportedRuntimeFunction('UTF8ArrayToString', false);
 unexportedRuntimeFunction('UTF8ToString', false);
 unexportedRuntimeFunction('stringToUTF8Array', false);
-unexportedRuntimeFunction('stringToUTF8', false);
-unexportedRuntimeFunction('lengthBytesUTF8', false);
+Module["stringToUTF8"] = stringToUTF8;
+Module["lengthBytesUTF8"] = lengthBytesUTF8;
 Module["stackTrace"] = stackTrace;
 unexportedRuntimeFunction('addOnPreRun', false);
 unexportedRuntimeFunction('addOnInit', false);
@@ -18112,6 +20997,8 @@ unexportedRuntimeFunction('wr', false);
 unexportedRuntimeFunction('wr__user', false);
 unexportedRuntimeFunction('jsWebRequestGetResponseHeaderString', false);
 unexportedRuntimeFunction('jsWebRequestGetResponseHeaderString__user', false);
+unexportedRuntimeFunction('WXFS', false);
+unexportedRuntimeFunction('WXFS__user', false);
 unexportedRuntimeFunction('warnOnce', false);
 unexportedRuntimeFunction('stackSave', false);
 unexportedRuntimeFunction('stackRestore', false);
