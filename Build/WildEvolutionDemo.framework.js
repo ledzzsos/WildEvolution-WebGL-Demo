@@ -2011,13 +2011,13 @@ var tempI64;
 // === Body ===
 
 var ASM_CONSTS = {
-  2304064: function() {return Module.webglContextAttributes.premultipliedAlpha;},  
- 2304125: function() {return Module.webglContextAttributes.preserveDrawingBuffer;},  
- 2304189: function() {return Module.webglContextAttributes.powerPreference;},  
- 2304247: function() {Module['emscripten_get_now_backup'] = performance.now;},  
- 2304302: function($0) {performance.now = function() { return $0; };},  
- 2304350: function($0) {performance.now = function() { return $0; };},  
- 2304398: function() {performance.now = Module['emscripten_get_now_backup'];}
+  2304416: function() {return Module.webglContextAttributes.premultipliedAlpha;},  
+ 2304477: function() {return Module.webglContextAttributes.preserveDrawingBuffer;},  
+ 2304541: function() {return Module.webglContextAttributes.powerPreference;},  
+ 2304599: function() {Module['emscripten_get_now_backup'] = performance.now;},  
+ 2304654: function($0) {performance.now = function() { return $0; };},  
+ 2304702: function($0) {performance.now = function() { return $0; };},  
+ 2304750: function() {performance.now = Module['emscripten_get_now_backup'];}
 };
 
 
@@ -20266,17 +20266,6 @@ function invoke_viiffi(index,a1,a2,a3,a4,a5) {
   }
 }
 
-function invoke_vifffiifi(index,a1,a2,a3,a4,a5,a6,a7,a8) {
-  var sp = stackSave();
-  try {
-    dynCall_vifffiifi(index,a1,a2,a3,a4,a5,a6,a7,a8);
-  } catch(e) {
-    stackRestore(sp);
-    if (e !== e+0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
 function invoke_iiifiiii(index,a1,a2,a3,a4,a5,a6,a7) {
   var sp = stackSave();
   try {
@@ -20369,6 +20358,17 @@ function invoke_viffii(index,a1,a2,a3,a4,a5) {
   var sp = stackSave();
   try {
     dynCall_viffii(index,a1,a2,a3,a4,a5);
+  } catch(e) {
+    stackRestore(sp);
+    if (e !== e+0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_vifffiifi(index,a1,a2,a3,a4,a5,a6,a7,a8) {
+  var sp = stackSave();
+  try {
+    dynCall_vifffiifi(index,a1,a2,a3,a4,a5,a6,a7,a8);
   } catch(e) {
     stackRestore(sp);
     if (e !== e+0) throw e;
