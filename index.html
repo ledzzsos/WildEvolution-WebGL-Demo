@@ -7,6 +7,11 @@
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
   <script src="browser-platform.js"></script>
+  <style id="browser-portrait-fit">
+      #unity-container.unity-desktop { width: min(720px, 100vw, calc((100vh - 38px) * .5625)); }
+      #unity-container.unity-desktop #unity-canvas { width: 100% !important; height: auto !important; }
+      #unity-footer { width: 100%; }
+    </style>
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
